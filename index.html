@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rutas de Encanto | Pueblos Mágicos de Hidalgo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/accesibilidad.css">
+</head>
+<body>
+
+  <!-- ========== ENCABEZADO ========== -->
+  <header class="header">
+    <div class="contenedor">
+      <a href="index.html" class="logo">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 42V20"/><path d="M24 26c-8 0-13-6-13-14 8 0 13 6 13 14Z"/><path d="M24 26c8 0 13-6 13-14-8 0-13 6-13 14Z"/><path d="M24 20c-3-4-3-9 0-14 3 5 3 10 0 14Z"/></svg>
+        Rutas de Encanto
+      </a>
+      <button class="menu-btn" aria-label="Abrir menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="nav">
+        <a href="index.html" class="activo">Inicio</a>
+        <a href="hospedaje.html">Hospedaje</a>
+        <a href="restaurantes.html">Restaurantes</a>
+        <a href="#guias">Guías</a>
+        <a href="#buscar" class="btn">Reserva ahora</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== 1. PORTADA CON LOS 3 PUEBLOS (se cambian solas) ========== -->
+  <section class="slider">
+
+    <div class="slide activo">
+      <img class="slide-img" src="img/pueblos/huasca.jpg" alt="" onerror="this.remove()">
+      <div class="slide-texto contenedor">
+        <span class="slide-etiqueta">Primer Pueblo Mágico de México</span>
+        <h1>Huasca de Ocampo</h1>
+        <p>Cascadas entre columnas de piedra, haciendas centenarias y leyendas de duendes en el bosque.</p>
+        <div class="slide-botones">
+          <a href="#explorar" class="btn" data-ir="huasca">Explorar Huasca</a>
+          <a href="#" class="btn btn-claro" data-reservar="huasca">Reservar hospedaje</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img class="slide-img" src="img/pueblos/mineral-del-chico.jpg" alt="" onerror="this.remove()">
+      <div class="slide-texto contenedor">
+        <span class="slide-etiqueta">Bosque &amp; Aventura</span>
+        <h1>Mineral del Chico</h1>
+        <p>Un pueblo escondido entre pinos y peñas gigantes. Senderismo, escalada y aire puro.</p>
+        <div class="slide-botones">
+          <a href="#explorar" class="btn" data-ir="chico">Explorar Mineral del Chico</a>
+          <a href="#" class="btn btn-claro" data-reservar="chico">Reservar hospedaje</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img class="slide-img" src="img/pueblos/real-del-monte.jpg" alt="" onerror="this.remove()">
+      <div class="slide-texto contenedor">
+        <span class="slide-etiqueta">Historia &amp; Sabor</span>
+        <h1>Real del Monte</h1>
+        <p>Calles empedradas, minas de plata y el aroma de los pastes recién horneados.</p>
+        <div class="slide-botones">
+          <a href="#explorar" class="btn" data-ir="real">Explorar Real del Monte</a>
+          <a href="#" class="btn btn-claro" data-reservar="real">Reservar hospedaje</a>
+        </div>
+      </div>
+    </div>
+
+    <button class="slider-flecha izq" aria-label="Anterior">‹</button>
+    <button class="slider-flecha der" aria-label="Siguiente">›</button>
+    <div class="slider-puntos"></div>
+  </section>
+
+  <!-- ========== 2. BUSCADOR DE HOSPEDAJE ========== -->
+  <section class="buscador-wrap" id="buscar">
+    <div class="contenedor">
+      <form class="buscador" id="buscador">
+        <div class="campo">
+          <label>¿A dónde vas?</label>
+          <select name="destino">
+            <option value="huasca">Huasca de Ocampo</option>
+            <option value="chico">Mineral del Chico</option>
+            <option value="real">Real del Monte</option>
+          </select>
+        </div>
+        <div class="campo"><label>Llegada</label><input type="date" name="llegada"></div>
+        <div class="campo"><label>Salida</label><input type="date" name="salida"></div>
+        <div class="campo">
+          <label>Huéspedes</label>
+          <select name="huespedes"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+        </div>
+        <button class="btn" type="submit">🔍 Buscar hospedaje</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ========== 3. BIENVENIDA: ¿A DÓNDE IRÁS HOY? ========== -->
+  <section class="seccion" id="explorar">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <span class="pastilla">👋 ¡BIENVENIDO, VIAJERO!</span>
+        <h2>¿A dónde irás hoy?</h2>
+        <p>Elige un pueblo y te mostramos dónde dormir, dónde comer y quién te lo enseña.</p>
+        <div class="adorno"></div>
+      </div>
+
+      <div class="tabs-pueblos">
+        <button class="tab-pueblo" data-pueblo="huasca">🌲 Huasca de Ocampo</button>
+        <button class="tab-pueblo" data-pueblo="chico">⛰️ Mineral del Chico</button>
+        <button class="tab-pueblo" data-pueblo="real">⛏️ Real del Monte</button>
+      </div>
+
+      <!-- El contenido de aquí se llena solo desde js/main.js -->
+      <div id="panel-pueblo" class="panel-pueblo"></div>
+    </div>
+  </section>
+
+  <!-- ========== INCLUSIÓN: TURISMO PARA TODOS ========== -->
+  <section class="seccion seccion-inclusion" id="inclusion">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <span class="pastilla">♿ TURISMO PARA TODOS</span>
+        <h2>Una página pensada para ti</h2>
+        <p>Si tienes debilidad visual, auditiva, motriz o cognitiva, activa aquí las ayudas que necesites.
+           Se quedan guardadas en todas las páginas.</p>
+        <div class="adorno"></div>
+      </div>
+
+      <div class="inclusion-grid">
+        <article class="inclusion-card">
+          <div class="inclusion-icono" aria-hidden="true">👁️</div>
+          <h3>Debilidad visual</h3>
+          <p>Agranda la letra, usa colores de alto contraste o escucha la página en voz alta.</p>
+          <div class="inclusion-botones">
+            <button data-a11y="texto+">🔠 Agrandar texto</button>
+            <button data-a11y="contraste" aria-pressed="false">🌗 Alto contraste</button>
+            <button data-a11y="voz" aria-pressed="false">🔊 Lectura en voz alta</button>
+          </div>
+        </article>
+
+        <article class="inclusion-card">
+          <div class="inclusion-icono" aria-hidden="true">👂</div>
+          <h3>Debilidad auditiva</h3>
+          <p>Video de bienvenida en Lengua de Señas Mexicana y avisos con luz en lugar de sonido.</p>
+          <div class="inclusion-botones">
+            <button data-a11y="lsm">🤟 Ver en Lengua de Señas</button>
+            <button data-a11y="avisos" aria-pressed="false">💡 Avisos visuales</button>
+          </div>
+        </article>
+
+        <article class="inclusion-card">
+          <div class="inclusion-icono" aria-hidden="true">🖐️</div>
+          <h3>Discapacidad motriz</h3>
+          <p>Botones más grandes y fáciles de tocar. Toda la página se puede usar solo con el teclado.</p>
+          <div class="inclusion-botones">
+            <button data-a11y="botones" aria-pressed="false">👆 Botones grandes</button>
+            <button data-a11y="foco" aria-pressed="false">⌨️ Resaltar teclado</button>
+          </div>
+        </article>
+
+        <article class="inclusion-card">
+          <div class="inclusion-icono" aria-hidden="true">🧠</div>
+          <h3>Discapacidad cognitiva</h3>
+          <p>Letra más clara, más espacio entre líneas y sin movimientos que distraigan.</p>
+          <div class="inclusion-botones">
+            <button data-a11y="lectura" aria-pressed="false">📖 Lectura fácil</button>
+            <button data-a11y="regla" aria-pressed="false">📏 Guía de lectura</button>
+            <button data-a11y="pausa" aria-pressed="false">⏸️ Detener animaciones</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="inclusion-pie">
+        <button class="btn" data-a11y="panel">♿ Ver todas las opciones</button>
+        <p>Atajo: presiona <kbd>Alt</kbd> + <kbd>A</kbd> en cualquier página para abrir el menú de accesibilidad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 4. GUÍAS LOCALES CON CALIFICACIÓN ========== -->
+  <section class="seccion seccion-guias" id="guias">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <span class="pastilla">🧭 GUÍAS CERTIFICADOS</span>
+        <h2>Conoce a tus guías locales</h2>
+        <p>Gente del pueblo que te enseña lo que no viene en los mapas. ¿Ya viajaste con alguno? ¡Califícalo!</p>
+        <div class="adorno"></div>
+      </div>
+      <!-- Las tarjetas se llenan solas desde js/main.js -->
+      <div class="rejilla" id="lista-guias"></div>
+    </div>
+  </section>
+
+  <!-- ========== 5. SERVICIOS ========== -->
+  <section class="servicios">
+    <div class="contenedor">
+      <div class="servicios-caja">
+        <a href="hospedaje.html" class="servicio">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"><path d="M5 38V12M5 30h38v8M43 30v-6a5 5 0 0 0-5-5H22v11M10 24a4 4 0 1 0 8 0 4 4 0 0 0-8 0"/></svg>
+          <div><h3>Hospedaje</h3><p>Cabañas, hostales y hoteles boutique en cada pueblo.</p></div>
+        </a>
+        <a href="restaurantes.html" class="servicio">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 6v14a5 5 0 0 0 10 0V6M17 6v36M34 42V6c-5 2-7 8-7 16h7"/></svg>
+          <div><h3>Restaurantes</h3><p>Pastes, barbacoa, pulque, trucha y más.</p></div>
+        </a>
+        <a href="guia.html" class="servicio">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"><path d="M10 6h24a4 4 0 0 1 4 4v32H14a4 4 0 0 1-4-4Z"/><path d="M10 36a4 4 0 0 1 4-4h24"/><circle cx="24" cy="17" r="4"/><path d="M24 21v5"/></svg>
+          <div><h3>Guía</h3><p>Rutas, mapas y lugares imperdibles.</p></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PIE ========== -->
+  <footer class="footer">
+    <div class="contenedor">
+      <span>Rutas de Encanto • Turismo responsable en Hidalgo</span>
+      <div class="footer-links">
+        <span>© 2026 Rutas de Encanto</span>
+        <a href="#">Contacto</a>
+        <a href="#">Aviso de privacidad</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Ventana emergente (reservar, restaurante, calificar) y aviso -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-caja">
+      <button class="modal-cerrar" data-cerrar aria-label="Cerrar">×</button>
+      <div id="modal-contenido"></div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/accesibilidad.js"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificar reservación | Rutas de Encanto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/accesibilidad.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="contenedor">
+      <a href="index.html" class="logo">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 42V20"/><path d="M24 26c-8 0-13-6-13-14 8 0 13 6 13 14Z"/><path d="M24 26c8 0 13-6 13-14-8 0-13 6-13 14Z"/><path d="M24 20c-3-4-3-9 0-14 3 5 3 10 0 14Z"/></svg>
+        Rutas de Encanto
+      </a>
+      <button class="menu-btn" aria-label="Abrir menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Inicio</a>
+        <a href="hospedaje.html">Hospedaje</a>
+        <a href="restaurantes.html">Restaurantes</a>
+        <a href="guia.html">Guía</a>
+        <a href="verificar.html" class="btn">Propietarios</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="cabecera-pagina">
+    <div class="contenedor">
+      <span class="pastilla">🔐 ACCESO PARA PROPIETARIOS</span>
+      <h1>Verificar reservación con QR</h1>
+      <p>Escanea el código QR del huésped con la cámara de tu celular, tablet o computadora
+         para confirmar sus datos antes de entregarle la habitación.</p>
+    </div>
+  </section>
+
+  <section class="seccion" style="padding-top:1rem">
+    <div class="contenedor verif-grid">
+
+      <!-- Escáner -->
+      <div class="card">
+        <div class="card-cuerpo">
+          <h2 class="verif-h2">1. Escanea el código</h2>
+          <div id="lector" class="verif-lector"></div>
+          <button class="btn btn-bloque" id="btn-camara">📷 Escanear con cámara</button>
+          <input type="file" id="archivo-qr" accept="image/*" class="a11y-oculto">
+          <label class="btn btn-borde btn-bloque" for="archivo-qr">🖼️ Subir foto del QR</label>
+          <ol class="verif-pasos">
+            <li>Pide al huésped su código QR.</li>
+            <li>Apunta la cámara al código.</li>
+            <li>Revisa que los datos coincidan con su identificación.</li>
+            <li>Presiona <strong>Registrar llegada</strong>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Resultado -->
+      <div class="card verif-resultado" id="resultado" aria-live="polite"></div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="contenedor">
+      <span>Rutas de Encanto • Turismo responsable en Hidalgo</span>
+      <div class="footer-links">
+        <span>© 2026 Rutas de Encanto</span>
+        <a href="#">Ayuda</a>
+        <a href="#">Contacto</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="js/accesibilidad.js"></script>
+  <script>
+  (function () {
+    const SECRETO = 'rutas-de-encanto-2026';   // debe ser IGUAL al de js/reservas-qr.js
+
+    function firmar(d) {
+      const texto = [d.folio, d.hotel, d.nombre, d.telefono, d.llegada, d.salida, d.huespedes, d.total, d.necesidades, SECRETO].join('|');
+      let h = 5381;
+      for (let i = 0; i < texto.length; i++) h = ((h << 5) + h + texto.charCodeAt(i)) >>> 0;
+      return h.toString(16).toUpperCase();
+    }
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const dinero = n => '$' + Number(n).toLocaleString('es-MX');
+    const fecha = s => new Date(s + 'T12:00').toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+    function hoyISO() { const f = new Date(); f.setMinutes(f.getMinutes() - f.getTimezoneOffset()); return f.toISOString().slice(0, 10); }
+    function leerCheckins() { try { return JSON.parse(localStorage.getItem('albaGuia_checkins')) || {}; } catch (e) { return {}; } }
+
+    const resultado = document.getElementById('resultado');
+    const btnCam = document.getElementById('btn-camara');
+    const archivo = document.getElementById('archivo-qr');
+    const lector = new Html5Qrcode('lector');
+    let escaneando = false;
+
+    const VACIO = `
+      <div class="card-cuerpo centrado">
+        <div class="verif-vacio" aria-hidden="true">📱</div>
+        <h2 class="verif-h2">2. Resultado</h2>
+        <p class="card-desc">Aquí verás los datos del huésped cuando escanees su código.</p>
+      </div>`;
+    resultado.innerHTML = VACIO;
+
+    async function detener() {
+      if (!escaneando) return;
+      try { await lector.stop(); } catch (e) {}
+      escaneando = false;
+      btnCam.textContent = '📷 Escanear con cámara';
+    }
+
+    btnCam.addEventListener('click', async () => {
+      if (escaneando) return detener();
+      try {
+        await lector.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 240, height: 240 } },
+          async texto => { await detener(); procesar(texto); }
+        );
+        escaneando = true;
+        btnCam.textContent = '⏹️ Detener cámara';
+      } catch (e) {
+        mostrar('error', 'No se pudo abrir la cámara',
+          'Da permiso de cámara al navegador. La cámara solo funciona con Live Server (localhost) o en una página https. También puedes subir una foto del QR.');
+      }
+    });
+
+    archivo.addEventListener('change', async () => {
+      const f = archivo.files[0];
+      if (!f) return;
+      await detener();
+      try { procesar(await lector.scanFile(f, false)); }
+      catch (e) { mostrar('error', 'No encontramos un código QR', 'Intenta con una foto más clara y bien iluminada.'); }
+      archivo.value = '';
+    });
+
+    function procesar(texto) {
+      let d = null;
+      try { d = JSON.parse(texto); } catch (e) {}
+      if (!d || d.app !== 'AlbaGuia') return mostrar('error', 'Este QR no es de Alba Guía', 'El código escaneado no corresponde a una reservación.');
+      if (firmar(d) !== d.firma) return mostrar('error', 'Código alterado', 'Los datos del QR fueron modificados. No aceptes esta reservación.', d);
+
+      const hoy = hoyISO();
+      const checkins = leerCheckins();
+      if (checkins[d.folio]) {
+        return mostrar('aviso', 'Este QR ya se usó', 'La llegada se registró el ' + new Date(checkins[d.folio]).toLocaleString('es-MX') + '.', d);
+      }
+      if (hoy > d.salida) return mostrar('error', 'Reservación vencida', 'La fecha de salida ya pasó.', d);
+      if (hoy < d.llegada) return mostrar('aviso', 'Reservación válida (llegada futura)', 'La llegada está programada para el ' + fecha(d.llegada) + '.', d, true);
+      mostrar('ok', 'Reservación válida', 'Los datos coinciden. Revisa su identificación y registra la llegada.', d, true);
+    }
+
+    function mostrar(estado, titulo, nota, d, puedeRegistrar) {
+      const iconos = { ok: '✅', aviso: '⚠️', error: '❌' };
+      resultado.className = 'card verif-resultado ' + estado;
+      resultado.innerHTML = `
+        <div class="card-cuerpo">
+          <div class="verif-titulo">
+            <span aria-hidden="true">${iconos[estado]}</span>
+            <div><h2>${titulo}</h2><p>${nota}</p></div>
+          </div>
+          ${d ? `
+          <ul class="info-lista">
+            <li><strong>Folio:</strong> ${esc(d.folio)}</li>
+            <li><strong>Huésped:</strong> ${esc(d.nombre)}</li>
+            <li><strong>Teléfono:</strong> ${esc(d.telefono)}</li>
+            <li><strong>Hospedaje:</strong> ${esc(d.hotel)}</li>
+            <li><strong>Fechas:</strong> ${fecha(d.llegada)} → ${fecha(d.salida)} (${esc(d.noches)} noches)</li>
+            <li><strong>Huéspedes:</strong> ${esc(d.huespedes)}</li>
+            <li><strong>Total:</strong> ${dinero(d.total)}</li>
+            ${d.necesidades ? `<li class="verif-necesidad"><strong>♿ Adaptación solicitada:</strong> ${esc(d.necesidades)}</li>` : ''}
+          </ul>` : ''}
+          <div class="dos-botones">
+            ${puedeRegistrar ? '<button class="btn" id="btn-checkin">✔️ Registrar llegada</button>' : ''}
+            <button class="btn btn-borde" id="btn-otro">🔄 Escanear otro</button>
+          </div>
+        </div>`;
+
+      if (navigator.vibrate) navigator.vibrate(estado === 'ok' ? 200 : [100, 80, 100]);
+      if (document.documentElement.classList.contains('a11y-voz') && window.AlbaHablar) AlbaHablar(titulo + '. ' + nota);
+      if (window.AlbaAviso) AlbaAviso(iconos[estado] + ' ' + titulo);
+
+      if (puedeRegistrar) {
+        document.getElementById('btn-checkin').addEventListener('click', () => {
+          const c = leerCheckins();
+          c[d.folio] = Date.now();
+          try { localStorage.setItem('albaGuia_checkins', JSON.stringify(c)); } catch (e) {}
+          mostrar('ok', 'Llegada registrada', '¡Listo! ' + d.nombre + ' ya puede pasar a su habitación.', d, false);
+        });
+      }
+      document.getElementById('btn-otro').addEventListener('click', () => {
+        resultado.className = 'card verif-resultado';
+        resultado.innerHTML = VACIO;
+        btnCam.click();
+      });
+    }
+  })();
+  </script>
+</body>
+</html>

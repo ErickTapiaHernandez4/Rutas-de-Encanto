@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía | Rutas de Encanto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/accesibilidad.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="contenedor">
+      <a href="index.html" class="logo">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 42V20"/><path d="M24 26c-8 0-13-6-13-14 8 0 13 6 13 14Z"/><path d="M24 26c8 0 13-6 13-14-8 0-13 6-13 14Z"/><path d="M24 20c-3-4-3-9 0-14 3 5 3 10 0 14Z"/></svg>
+        Rutas de Encanto
+      </a>
+      <button class="menu-btn" aria-label="Abrir menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Inicio</a>
+        <a href="hospedaje.html">Hospedaje</a>
+        <a href="restaurantes.html">Restaurantes</a>
+        <a href="guia.html" class="activo">Guía</a>
+        <a href="hospedaje.html" class="btn">Planifica tu viaje</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="cabecera-pagina" style="text-align:center">
+    <div class="contenedor">
+      <span class="pastilla">🌿 PUEBLOS MÁGICOS • HIDALGO</span>
+      <h1>Guías Locales &amp; Lugares para visitar</h1>
+      <p style="margin-inline:auto">Explora con guías locales y descubre la belleza de los Pueblos Mágicos de Hidalgo</p>
+    </div>
+  </section>
+
+  <section class="seccion" style="padding-top:1rem">
+    <div class="contenedor">
+      <div class="titulo-lateral">
+        <h2>Guías Locales</h2>
+        <p>Conoce a nuestros guías certificados • Reserva tu experiencia</p>
+      </div>
+      <div class="rejilla">
+        <!-- Guía 1: foto en img/guias/guia-1.jpg (cuadrada de preferencia) -->
+        <article class="card">
+          <div class="foto avatar"><img src="img/guias/guia-1.jpg" alt="Lupita Mendoza"></div>
+          <div class="card-cuerpo card-centro">
+            <h3>Lupita Mendoza</h3>
+            <div class="estrellas"><span>★★★★★</span> 4.9 • 32 reseñas</div>
+            <p class="card-desc">🌐 Idiomas: Español • English • Hñähñu</p>
+            <strong>Especialidades:</strong>
+            <div class="etiquetas" style="justify-content:center"><span class="etiqueta terracota">Barbacoa tour</span><span class="etiqueta olivo">Gastronomía local</span><span class="etiqueta terracota">Cocina tradicional</span></div>
+          </div>
+        </article>
+
+        <!-- Guía 2: foto en img/guias/guia-2.jpg (cuadrada de preferencia) -->
+        <article class="card">
+          <div class="foto avatar"><img src="img/guias/guia-2.jpg" alt="Carlos Reyes"></div>
+          <div class="card-cuerpo card-centro">
+            <h3>Carlos Reyes</h3>
+            <div class="estrellas"><span>★★★★★</span> 4.8 • 27 reseñas</div>
+            <p class="card-desc">🌐 Idiomas: Español • English</p>
+            <strong>Especialidades:</strong>
+            <div class="etiquetas" style="justify-content:center"><span class="etiqueta terracota">Mining tour</span><span class="etiqueta olivo">Historia minera</span><span class="etiqueta">Real del Monte</span></div>
+          </div>
+        </article>
+
+        <!-- Guía 3: foto en img/guias/guia-3.jpg (cuadrada de preferencia) -->
+        <article class="card">
+          <div class="foto avatar"><img src="img/guias/guia-3.jpg" alt="Ismael García"></div>
+          <div class="card-cuerpo card-centro">
+            <h3>Ismael García</h3>
+            <div class="estrellas"><span>★★★★★</span> 4.9 • 41 reseñas</div>
+            <p class="card-desc">🌐 Idiomas: Español • English • Francés</p>
+            <strong>Especialidades:</strong>
+            <div class="etiquetas" style="justify-content:center"><span class="etiqueta terracota">Ruta del pulque</span><span class="etiqueta olivo">Tradición pulquera</span><span class="etiqueta">Agroturismo</span></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="separador">✦ ❀ ✿ ❀ ✦</div>
+
+      <div class="titulo-lateral">
+        <h2>Lugares para visitar</h2>
+        <p>Rincones imperdibles • Naturaleza, historia y cultura</p>
+      </div>
+      <div class="rejilla">
+        <!-- Lugar 1: foto en img/lugares/lugar-1.jpg -->
+        <article class="card">
+          <div class="foto"><img src="img/lugares/lugar-1.jpg" alt="Prismas Basálticos"></div>
+          <div class="card-cuerpo card-centro">
+            <h3>Prismas Basálticos</h3>
+            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Huasca de Ocampo • 25 min desde el centro</p>
+            <p class="card-desc">Formaciones de basalto con cascadas y senderos rodeados de bosque.</p>
+            <a href="#" class="btn btn-bloque" style="margin-top:auto">📍 Ver ruta</a>
+          </div>
+        </article>
+
+        <!-- Lugar 2: foto en img/lugares/lugar-2.jpg -->
+        <article class="card">
+          <div class="foto"><img src="img/lugares/lugar-2.jpg" alt="Panteón Inglés"></div>
+          <div class="card-cuerpo card-centro">
+            <h3>Panteón Inglés</h3>
+            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Real del Monte • 10 min desde el centro</p>
+            <p class="card-desc">Cementerio histórico del siglo XIX con legado minero británico.</p>
+            <a href="#" class="btn btn-bloque" style="margin-top:auto">📍 Ver ruta</a>
+          </div>
+        </article>
+
+        <!-- Lugar 3: foto en img/lugares/lugar-3.jpg -->
+        <article class="card">
+          <div class="foto"><img src="img/lugares/lugar-3.jpg" alt="Acueducto del Padre Tembleque"></div>
+          <div class="card-cuerpo card-centro">
+            <h3>Acueducto del Padre Tembleque</h3>
+            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Zempoala • 35 min desde Pachuca</p>
+            <p class="card-desc">Acueducto del siglo XVI, Patrimonio de la Humanidad por la UNESCO.</p>
+            <a href="#" class="btn btn-bloque" style="margin-top:auto">📍 Ver ruta</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="contenedor">
+      <span>Alba Guía • Turismo responsable en Hidalgo</span>
+      <div class="footer-links">
+        <span>© 2026 Alba Guía</span>
+        <a href="#">Ayuda</a>
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Contacto</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/accesibilidad.js"></script>
+</body>
+</html>

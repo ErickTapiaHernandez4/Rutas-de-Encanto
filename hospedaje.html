@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospedaje | Rutas de Encanto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/accesibilidad.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="contenedor">
+      <a href="index.html" class="logo">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 42V20"/><path d="M24 26c-8 0-13-6-13-14 8 0 13 6 13 14Z"/><path d="M24 26c8 0 13-6 13-14-8 0-13 6-13 14Z"/><path d="M24 20c-3-4-3-9 0-14 3 5 3 10 0 14Z"/></svg>
+        Rutas de Encanto
+      </a>
+      <button class="menu-btn" aria-label="Abrir menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Inicio</a>
+        <a href="hospedaje.html" class="activo">Hospedaje</a>
+        <a href="restaurantes.html">Restaurantes</a>
+        <a href="guia.html">Guía</a>
+        <a href="hospedaje.html" class="btn">Planifica tu viaje</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="cabecera-pagina">
+    <div class="contenedor">
+      <h1>Alojamientos destacados en Pueblos Mágicos</h1>
+      <p>Explora hospedajes auténticos con arquitectura tradicional y hospitalidad local. Reservas fáciles y soporte en español.</p>
+
+      <!-- Filtros: el data-filtro debe coincidir con las palabras de data-filtros en cada tarjeta -->
+      <div class="filtros">
+        <button class="chip activo" data-filtro="todos">Todos</button>
+        <button class="chip" data-filtro="desayuno">Con desayuno</button>
+        <button class="chip" data-filtro="pet">Pet-friendly</button>
+        <button class="chip" data-filtro="alberca">Con alberca</button>
+        <button class="chip" data-filtro="centro">Centro histórico</button>
+        <span class="contador"></span>
+      </div>
+
+      <div class="rejilla">
+
+        <!-- ===== HOSPEDAJE 1 =====
+             Cambia nombre, lugar, etiquetas y precio.
+             Pon tu foto en: img/hospedaje/hotel-1.jpg -->
+        <article class="card" data-filtros="desayuno centro">
+          <div class="foto">
+            <span class="badge">Nuevo</span>
+            <img src="img/hospedaje/hotel-1.jpg" alt="Foto del hotel">
+          </div>
+          <div class="card-cuerpo">
+            <h3>Nombre del hotel</h3>
+            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
+            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Real del Monte, Hidalgo</p>
+            <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
+            <div class="card-pie">
+              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <a href="#" class="btn">Reservar</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== HOSPEDAJE 2 ===== -->
+        <article class="card" data-filtros="alberca">
+          <div class="foto">
+            <span class="badge verde">Popular</span>
+            <img src="img/hospedaje/hotel-2.jpg" alt="Foto del hotel">
+          </div>
+          <div class="card-cuerpo">
+            <h3>Nombre del hotel</h3>
+            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
+            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Tecozautla, Hidalgo</p>
+            <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
+            <div class="card-pie">
+              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <a href="#" class="btn">Reservar</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== HOSPEDAJE 3 ===== -->
+        <article class="card" data-filtros="pet">
+          <div class="foto">
+            <span class="badge">Favorito</span>
+            <img src="img/hospedaje/hotel-3.jpg" alt="Foto del hotel">
+          </div>
+          <div class="card-cuerpo">
+            <h3>Nombre del hotel</h3>
+            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
+            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Huasca de Ocampo, Hidalgo</p>
+            <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
+            <div class="card-pie">
+              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <a href="#" class="btn">Reservar</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== HOSPEDAJE 4 ===== -->
+        <article class="card" data-filtros="desayuno pet">
+          <div class="foto"><img src="img/hospedaje/hotel-4.jpg" alt="Foto del hotel"></div>
+          <div class="card-cuerpo">
+            <h3>Nombre del hotel</h3>
+            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
+            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Mineral del Chico, Hidalgo</p>
+            <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
+            <div class="card-pie">
+              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <a href="#" class="btn">Reservar</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== HOSPEDAJE 5 ===== -->
+        <article class="card" data-filtros="centro">
+          <div class="foto"><img src="img/hospedaje/hotel-5.jpg" alt="Foto del hotel"></div>
+          <div class="card-cuerpo">
+            <h3>Nombre del hotel</h3>
+            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
+            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Huichapan, Hidalgo</p>
+            <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
+            <div class="card-pie">
+              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <a href="#" class="btn">Reservar</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== HOSPEDAJE 6 ===== -->
+        <article class="card" data-filtros="alberca desayuno">
+          <div class="foto"><img src="img/hospedaje/hotel-6.jpg" alt="Foto del hotel"></div>
+          <div class="card-cuerpo">
+            <h3>Nombre del hotel</h3>
+            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
+            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Zimapán, Hidalgo</p>
+            <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
+            <div class="card-pie">
+              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <a href="#" class="btn">Reservar</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Para agregar más: copia un bloque <article>...</article> completo,
+             pégalo aquí y cambia la foto a hotel-7.jpg, hotel-8.jpg, etc. -->
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="contenedor">
+      <span>Rutas de Encanto • Turismo responsable en Hidalgo</span>
+      <div class="footer-links">
+        <span>© 2026 Rutas de Encanto</span>
+        <a href="#">Ayuda</a>
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Contacto</a>
+        <a href="verificar.html">🔐 Propietarios: verificar QR</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+  <script src="js/accesibilidad.js"></script>
+  <script src="js/reservas-qr.js"></script>
+</body>
+</html>

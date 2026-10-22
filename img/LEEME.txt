@@ -1,0 +1,14 @@
+CÓMO PONER TUS FOTOS
+Guarda tus fotos con EXACTAMENTE estos nombres (minúsculas, .jpg):
+
+img/hero.jpg                         -> foto grande de la portada
+img/pueblos/huasca.jpg, real-del-monte.jpg, zempoala.jpg, zimapan.jpg,
+            huichapan.jpg, tecozautla.jpg, mineral-del-chico.jpg, metztitlan.jpg
+img/hospedaje/hotel-1.jpg ... hotel-6.jpg
+img/restaurantes/restaurante-1.jpg ... restaurante-6.jpg
+img/guias/guia-1.jpg ... guia-3.jpg
+img/lugares/lugar-1.jpg ... lugar-3.jpg
+
+Mientras no exista la foto, la página muestra un recuadro punteado
+con el nombre del archivo que falta.
+Si tu foto es .png, cambia la extensión en el src="" del HTML.

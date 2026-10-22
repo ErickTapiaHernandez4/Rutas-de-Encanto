@@ -1,0 +1,263 @@
+/* =========================================================
+   ALBA GUÍA — Accesibilidad e inclusión
+   ========================================================= */
+
+/* Foco visible para todos (navegación con teclado) */
+:focus-visible { outline: 3px solid var(--terracota); outline-offset: 2px; }
+[tabindex="-1"]:focus { outline: none; }
+
+/* Saltar al contenido */
+.a11y-saltar {
+  position: absolute; left: 1rem; top: -100px; z-index: 1000;
+  background: var(--verde); color: #fff; font-weight: 800;
+  padding: .8rem 1.2rem; border-radius: 10px;
+}
+.a11y-saltar:focus { top: 1rem; }
+.a11y-oculto {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- Botón flotante ---------- */
+.a11y-boton {
+  position: fixed; left: 1.2rem; bottom: 1.2rem; z-index: 300;
+  width: 62px; height: 62px; border-radius: 50%;
+  border: 3px solid #fff; background: var(--verde); color: #fff;
+  display: grid; place-items: center; cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0,0,0,.3);
+  transition: transform .2s;
+}
+.a11y-boton:hover { transform: scale(1.08); }
+.a11y-boton svg { width: 36px; height: 36px; }
+
+/* ---------- Panel ---------- */
+.a11y-panel {
+  position: fixed; left: 1.2rem; bottom: 5.8rem; z-index: 300;
+  width: min(360px, calc(100vw - 2.4rem));
+  max-height: calc(100vh - 7.5rem); overflow: auto;
+  background: var(--crema-2); border: 2px solid var(--verde); border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.25);
+  padding: 1.1rem;
+}
+.a11y-panel[hidden] { display: none; }
+.a11y-cabeza { display: flex; justify-content: space-between; align-items: center; margin-bottom: .8rem; }
+.a11y-cabeza h2 { font-size: 1.3rem; color: var(--verde); }
+.a11y-cerrar {
+  width: 38px; height: 38px; border-radius: 50%; border: 0;
+  background: var(--beige); font-size: 1.3rem; cursor: pointer;
+}
+.a11y-texto {
+  display: flex; justify-content: space-between; align-items: center; gap: .5rem;
+  background: var(--beige); border-radius: 12px; padding: .6rem .8rem; font-weight: 800;
+}
+.a11y-texto div { display: flex; align-items: center; gap: .4rem; }
+.a11y-texto button {
+  width: 44px; height: 40px; border-radius: 10px; cursor: pointer;
+  border: 2px solid var(--verde); background: #fff; color: var(--verde); font-weight: 800;
+}
+.a11y-texto output { min-width: 3.2rem; text-align: center; }
+.a11y-panel fieldset { border: 0; margin-top: .8rem; }
+.a11y-panel legend { font-weight: 800; color: var(--verde); margin-bottom: .4rem; }
+.a11y-opciones { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.a11y-op {
+  display: flex; flex-direction: column; align-items: center; gap: .25rem;
+  font: inherit; font-size: .85rem; font-weight: 700; text-align: center;
+  padding: .7rem .4rem; border-radius: 12px; cursor: pointer;
+  border: 2px solid var(--borde); background: #fff; color: var(--texto);
+}
+.a11y-op span { font-size: 1.4rem; }
+.a11y-op:hover { border-color: var(--olivo); }
+.a11y-op[aria-pressed="true"] { background: var(--verde); border-color: var(--verde); color: #fff; }
+.a11y-reset {
+  width: 100%; margin-top: 1rem; padding: .7rem; cursor: pointer;
+  font: inherit; font-weight: 800; color: var(--terracota);
+  border: 2px dashed var(--terracota); border-radius: 12px; background: transparent;
+}
+
+/* ---------- Botón "Escuchar" en cada tarjeta ---------- */
+.a11y-escuchar {
+  align-self: flex-start; margin-bottom: .3rem; cursor: pointer;
+  font: inherit; font-size: .85rem; font-weight: 800;
+  padding: .35rem .85rem; border-radius: 999px;
+  border: 2px solid var(--olivo); background: #fff; color: var(--olivo);
+}
+.card-centro .a11y-escuchar { align-self: center; }
+.cabecera-pagina .a11y-escuchar { margin-bottom: 1rem; }
+.a11y-escuchar.sonando { background: var(--terracota); border-color: var(--terracota); color: #fff; }
+
+/* ---------- Video LSM ---------- */
+.a11y-video { aspect-ratio: 16 / 9; border-radius: 14px; margin-bottom: 1rem; background: #000; }
+.a11y-video video { width: 100%; height: 100%; }
+.a11y-transcripcion summary { cursor: pointer; font-weight: 800; color: var(--verde); }
+.a11y-transcripcion p { margin-top: .5rem; line-height: 1.7; }
+
+/* =================== MODOS =================== */
+
+/* 👁️ Alto contraste */
+html.a11y-contraste body,
+html.a11y-contraste body * {
+  background-color: #000 !important; background-image: none !important;
+  color: #fff !important; border-color: #fff !important;
+  box-shadow: none !important; text-shadow: none !important;
+}
+html.a11y-contraste a, html.a11y-contraste button,
+html.a11y-contraste a *, html.a11y-contraste button * { color: #FFE500 !important; }
+html.a11y-contraste .btn, html.a11y-contraste .chip.activo,
+html.a11y-contraste .a11y-op[aria-pressed="true"] { background-color: #FFE500 !important; color: #000 !important; }
+html.a11y-contraste .btn *, html.a11y-contraste .a11y-op[aria-pressed="true"] * { color: #000 !important; }
+html.a11y-contraste .qr-caja { background-color: #fff !important; }
+html.a11y-contraste .a11y-op[aria-pressed="true"] span { background-color: transparent !important; }
+html.a11y-contraste .toast { border: 2px solid #FFE500; }
+
+/* 👁️ Cursor grande */
+html.a11y-cursor, html.a11y-cursor * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'><path d='M4 2l16 10-7 1.5L16.5 21l-3 1.3-3.4-7.6L4 19z' fill='black' stroke='white' stroke-width='1.3'/></svg>") 4 2, auto !important;
+}
+
+/* 👁️ Resaltar enlaces y botones */
+html.a11y-enlaces a { text-decoration: underline !important; text-underline-offset: 4px; text-decoration-thickness: 2px !important; }
+html.a11y-enlaces a, html.a11y-enlaces button { outline: 2px dashed var(--terracota); outline-offset: 2px; }
+
+/* 👂 Avisos visuales: destello amarillo en el borde de la pantalla */
+html::after {
+  content: ""; position: fixed; inset: 0; z-index: 400; pointer-events: none;
+  border: 10px solid #FFE500; opacity: 0;
+}
+html.a11y-destello::after { animation: a11y-destello .6s ease 3; }
+@keyframes a11y-destello { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+/* 🖐️ Botones grandes (fáciles de tocar) */
+html.a11y-botones .btn, html.a11y-botones .chip,
+html.a11y-botones .nav a, html.a11y-botones .a11y-escuchar {
+  min-height: 56px; min-width: 56px; padding: .9rem 1.4rem; font-size: 1.1rem;
+}
+html.a11y-botones .card-pie { flex-wrap: wrap; }
+html.a11y-botones .filtros { gap: 1rem; }
+
+/* 🖐️ Resaltar el elemento seleccionado con el teclado */
+html.a11y-foco *:focus-visible {
+  outline: 4px solid var(--terracota) !important; outline-offset: 4px !important;
+  box-shadow: 0 0 0 9px #FFE500 !important;
+}
+
+/* 🧠 Lectura fácil: letra clara y más espacio */
+html.a11y-lectura body * {
+  font-family: Verdana, Tahoma, 'Nunito Sans', sans-serif !important;
+  letter-spacing: .03em !important; word-spacing: .12em !important;
+}
+html.a11y-lectura p, html.a11y-lectura li { line-height: 1.9 !important; }
+html.a11y-lectura em, html.a11y-lectura i, html.a11y-lectura blockquote { font-style: normal !important; }
+
+/* 🧠 Guía de lectura (franja que sigue al mouse) */
+.a11y-banda {
+  display: none; position: fixed; left: 0; right: 0; height: 48px;
+  z-index: 250; pointer-events: none;
+  background: rgba(255, 229, 0, .18);
+  border-top: 3px solid var(--terracota); border-bottom: 3px solid var(--terracota);
+}
+html.a11y-regla .a11y-banda { display: block; }
+
+/* 🧠 Detener animaciones (también si el sistema lo pide) */
+html.a11y-pausa *, html.a11y-pausa *::before, html.a11y-pausa *::after {
+  animation: none !important; transition: none !important; scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* =========================================================
+   RESERVACIÓN CON CÓDIGO QR (IoT)
+   ========================================================= */
+.qr-caja {
+  display: inline-block; margin: .4rem auto .6rem; line-height: 0;
+  background: #fff; border: 3px solid var(--verde); border-radius: 16px; overflow: hidden;
+}
+.qr-caja canvas { width: 240px; height: 240px; image-rendering: pixelated; }
+.qr-folio { font-size: 1.1rem; letter-spacing: .05em; }
+.dos-botones > :only-child { grid-column: 1 / -1; }
+
+/* Página de verificación para propietarios */
+.verif-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+.verif-grid .card:hover { transform: none; }
+.verif-h2 { font-size: 1.4rem; color: var(--verde); }
+.verif-lector { border-radius: 14px; overflow: hidden; background: var(--beige); }
+.verif-lector:empty { aspect-ratio: 4 / 3; display: grid; place-items: center; }
+.verif-lector:empty::before { content: "📷 Aquí aparecerá la cámara"; font-weight: 700; color: var(--olivo); }
+.verif-lector video { width: 100% !important; display: block; }
+.verif-pasos { padding-left: 1.3rem; display: grid; gap: .3rem; font-weight: 600; font-size: .95rem; margin-top: .4rem; }
+#archivo-qr:focus-visible + label { outline: 3px solid var(--terracota); outline-offset: 3px; }
+.verif-resultado { border-width: 3px; min-height: 300px; }
+.verif-resultado.ok { border-color: #3C8D2F; }
+.verif-resultado.aviso { border-color: #D99A00; }
+.verif-resultado.error { border-color: #B3261E; }
+.verif-titulo { display: flex; gap: .9rem; align-items: flex-start; }
+.verif-titulo > span { font-size: 2.6rem; line-height: 1; }
+.verif-titulo h2 { font-size: 1.5rem; color: var(--verde); }
+.verif-vacio { font-size: 3.5rem; }
+.verif-necesidad { background: var(--beige); padding: .5rem .7rem; border-radius: 8px; }
+
+@media (max-width: 900px) {
+  .verif-grid { grid-template-columns: 1fr; }
+}
+
+/* Al imprimir el QR solo sale la ventana de la reservación */
+@media print {
+  body > *:not(#modal) { display: none !important; }
+  #modal { position: static; background: none; backdrop-filter: none; }
+  .modal-caja { max-height: none; box-shadow: none; }
+  .modal-cerrar, .modal .dos-botones { display: none !important; }
+}
+
+/* =========================================================
+   PÁGINA PRINCIPAL: sección "Turismo para todos"
+   ========================================================= */
+.seccion-inclusion { background: var(--verde); color: var(--crema); }
+.seccion-inclusion .titulo-seccion h2 { color: var(--crema); }
+.seccion-inclusion .titulo-seccion p { color: #DCD6B8; }
+.seccion-inclusion .pastilla { background: var(--terracota); color: #fff; }
+.seccion-inclusion .adorno, .seccion-inclusion .adorno::after { background: #E6DFB8; }
+.inclusion-grid { display: grid; gap: 1.3rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.inclusion-card {
+  background: var(--crema-2); color: var(--texto);
+  border-radius: 18px; padding: 1.4rem;
+  display: flex; flex-direction: column; gap: .7rem;
+  box-shadow: 0 10px 26px rgba(0,0,0,.18);
+}
+.inclusion-icono {
+  width: 62px; height: 62px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 1.9rem;
+  background: var(--beige);
+}
+.inclusion-card h3 { font-size: 1.35rem; color: var(--verde); }
+.inclusion-card p { font-size: .95rem; color: var(--gris); }
+.inclusion-botones { display: grid; gap: .5rem; margin-top: auto; }
+.inclusion-botones button {
+  font: inherit; font-weight: 800; font-size: .92rem; cursor: pointer;
+  display: flex; align-items: center; gap: .5rem;
+  padding: .65rem .9rem; border-radius: 12px;
+  border: 2px solid var(--olivo); background: #fff; color: var(--olivo);
+  transition: all .2s;
+}
+.inclusion-botones button:hover { background: var(--beige); }
+.inclusion-botones button[aria-pressed="true"] { background: var(--olivo); color: #fff; }
+.inclusion-botones button[aria-pressed="true"]::after { content: "✓ Activo"; margin-left: auto; font-size: .8rem; }
+.inclusion-pie { text-align: center; margin-top: 1.8rem; }
+.inclusion-pie .btn { background: var(--crema); color: var(--verde); }
+.inclusion-pie .btn:hover { background: #fff; }
+.inclusion-pie p { margin-top: .7rem; font-size: .9rem; color: #DCD6B8; }
+kbd {
+  background: var(--crema); color: var(--verde); border-radius: 6px;
+  padding: .1rem .45rem; font-family: inherit; font-weight: 800; font-size: .85em;
+}
+
+/* Ajustes de los modos para la página principal */
+html.a11y-pausa .slide-texto > * { opacity: 1 !important; }
+html.a11y-contraste .tab-pueblo.activo,
+html.a11y-contraste .inclusion-botones button[aria-pressed="true"] { background-color: #FFE500 !important; color: #000 !important; }
+html.a11y-contraste .inclusion-botones button[aria-pressed="true"] * { color: #000 !important; }
+html.a11y-botones .tab-pueblo, html.a11y-botones .inclusion-botones button { min-height: 56px; font-size: 1.1rem; }
+html.a11y-botones .slider-flecha { width: 64px; height: 64px; }
+html.a11y-contraste .slider-puntos button { background-color: #fff !important; }
+html.a11y-contraste .slider-puntos button.activo { background-color: #FFE500 !important; }
+.slide-texto .a11y-escuchar, .titulo-seccion .a11y-escuchar { align-self: center; margin-bottom: .8rem; }
+.titulo-seccion .a11y-escuchar { display: inline-block; }
