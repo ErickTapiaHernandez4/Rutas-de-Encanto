@@ -1,6 +1,6 @@
 /* =========================================================
    ALBA GUÍA — Accesibilidad e inclusión
-   Visual · Auditiva · Motriz · Cognitiva
+   Visual · Motriz · Cognitiva
    ========================================================= */
 (function () {
   const raiz = document.documentElement;
@@ -17,13 +17,8 @@
       { id: 'voz', icono: '🔊', texto: 'Lectura en voz alta' },
       { id: 'enlaces', icono: '🔗', texto: 'Resaltar enlaces' }
     ]},
-    { grupo: '👂 Auditiva', items: [
-      { id: 'avisos', icono: '💡', texto: 'Avisos visuales' },
-      { id: 'lsm', icono: '🤟', texto: 'Video en Lengua de Señas', accion: true }
-    ]},
     { grupo: '🖐️ Motriz', items: [
-      { id: 'botones', icono: '👆', texto: 'Botones grandes' },
-      { id: 'foco', icono: '⌨️', texto: 'Resaltar teclado' }
+      { id: 'botones', icono: '👆', texto: 'Botones grandes' }
     ]},
     { grupo: '🧠 Cognitiva', items: [
       { id: 'lectura', icono: '📖', texto: 'Lectura fácil' },
@@ -86,14 +81,13 @@
   document.body.append(boton, panel, banda, vivo);
   document.addEventListener('mousemove', e => { banda.style.top = (e.clientY - 24) + 'px'; });
 
-  /* ---------- Avisos (texto + destello visual para personas sordas) ---------- */
+  /* ---------- Avisos en pantalla ---------- */
   function avisar(texto) {
     let t = document.getElementById('toast');
     if (!t) { t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.append(t); }
     t.textContent = texto;
     t.classList.add('visible');
     vivo.textContent = texto;
-    if (ajustes.avisos) { raiz.classList.remove('a11y-destello'); void raiz.offsetWidth; raiz.classList.add('a11y-destello'); }
     if (navigator.vibrate) navigator.vibrate(150);
     clearTimeout(avisar.t);
     avisar.t = setTimeout(() => t.classList.remove('visible'), 3500);
@@ -179,22 +173,6 @@
   new MutationObserver(() => { if (ajustes.voz) ponerBotonesVoz(); })
     .observe(document.body, { childList: true, subtree: true });
 
-  /* ---------- Video en Lengua de Señas Mexicana ---------- */
-  function abrirLSM() {
-    abrirModal(`
-      <h3>🤟 Bienvenida en Lengua de Señas Mexicana</h3>
-      <p class="modal-sub">Video con intérprete de LSM y transcripción en texto.</p>
-      <div class="foto a11y-video">
-        <video src="video/lsm-bienvenida.mp4" controls playsinline onerror="fotoVacia(this)"></video>
-      </div>
-      <details open class="a11y-transcripcion">
-        <summary>📝 Transcripción del video</summary>
-        <p>¡Bienvenido a Alba Guía! Aquí encuentras hospedaje, restaurantes y guías en los Pueblos Mágicos
-           de Hidalgo. Todos los negocios pueden atenderte por mensaje de texto o WhatsApp,
-           y algunos cuentan con personal que se comunica en Lengua de Señas Mexicana.</p>
-      </details>`);
-  }
-
   /* ---------- Aplicar ajustes ---------- */
   function aplicar() {
     raiz.style.fontSize = ajustes.texto + '%';
@@ -221,7 +199,6 @@
   boton.addEventListener('click', () => alternarPanel());
   panel.querySelector('.a11y-cerrar').addEventListener('click', () => { alternarPanel(false); boton.focus(); });
   function accion(id, b) {
-    if (id === 'lsm') return abrirLSM();
     if (id === 'panel') return alternarPanel(true);
     if (id === 'texto+' || id === 'texto-') {
       ajustes.texto = Math.min(160, Math.max(80, ajustes.texto + (id === 'texto+' ? 10 : -10)));
@@ -241,7 +218,7 @@
     if (tx) accion(Number(tx.dataset.texto) > 0 ? 'texto+' : 'texto-');
     if (op) accion(op.dataset.op);
   });
-  // Botones en la página con data-a11y="contraste", "voz", "lsm", "texto+", "panel"...
+  // Botones en la página con data-a11y="contraste", "voz", "texto+", "panel"...
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-a11y]');
     if (b) accion(b.dataset.a11y, b);
