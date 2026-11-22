@@ -20,12 +20,15 @@
       <button class="menu-btn" aria-label="Abrir menú">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
-      <nav class="nav">
+      <nav class="nav" aria-label="Principal">
         <a href="index.html">Inicio</a>
         <a href="hospedaje.html" class="activo">Hospedaje</a>
         <a href="restaurantes.html">Restaurantes</a>
-        <a href="guia.html">Guía</a>
-        <a href="hospedaje.html" class="btn">Planifica tu viaje</a>
+        <a href="guia.html">Guías</a>
+        <a href="php/panel_guia.php" data-rol="guia,admin" hidden>Mi perfil de guía</a>
+        <a href="verificar.php" data-rol="recepcion,admin" hidden>Verificar QR</a>
+        <a href="planificar.html" class="btn">Planifica tu viaje</a>
+        <a id="btn-sesion" href="php/login.php" class="btn">Iniciar sesión</a>
       </nav>
     </div>
   </header>
@@ -50,99 +53,99 @@
         <!-- ===== HOSPEDAJE 1 =====
              Cambia nombre, lugar, etiquetas y precio.
              Pon tu foto en: img/hospedaje/hotel-1.jpg -->
-        <article class="card" data-filtros="desayuno centro">
+        <article class="card" data-filtros="desayuno centro" data-hotel-id="3">
           <div class="foto">
             <span class="badge">Nuevo</span>
             <img src="img/hospedaje/hotel-1.jpg" alt="Foto del hotel">
           </div>
           <div class="card-cuerpo">
-            <h3>Nombre del hotel</h3>
+            <h3>Posada Real Minera</h3>
             <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
             <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Real del Monte, Hidalgo</p>
             <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
             <div class="card-pie">
-              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <p class="precio">desde <strong>$2,100</strong> / noche</p>
               <a href="#" class="btn">Reservar</a>
             </div>
           </div>
         </article>
 
         <!-- ===== HOSPEDAJE 2 ===== -->
-        <article class="card" data-filtros="alberca">
+        <article class="card" data-filtros="alberca" data-hotel-id="4">
           <div class="foto">
             <span class="badge verde">Popular</span>
             <img src="img/hospedaje/hotel-2.jpg" alt="Foto del hotel">
           </div>
           <div class="card-cuerpo">
-            <h3>Nombre del hotel</h3>
+            <h3>Hotel Tecozautla</h3>
             <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
             <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Tecozautla, Hidalgo</p>
             <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
             <div class="card-pie">
-              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <p class="precio">desde <strong>$492</strong> / noche</p>
               <a href="#" class="btn">Reservar</a>
             </div>
           </div>
         </article>
 
         <!-- ===== HOSPEDAJE 3 ===== -->
-        <article class="card" data-filtros="pet">
+        <article class="card" data-filtros="pet" data-hotel-id="1">
           <div class="foto">
             <span class="badge">Favorito</span>
             <img src="img/hospedaje/hotel-3.jpg" alt="Foto del hotel">
           </div>
           <div class="card-cuerpo">
-            <h3>Nombre del hotel</h3>
+            <h3>Cabañas Bosque de Huasca</h3>
             <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
             <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Huasca de Ocampo, Hidalgo</p>
             <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
             <div class="card-pie">
-              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <p class="precio">desde <strong>$1,450</strong> / noche</p>
               <a href="#" class="btn">Reservar</a>
             </div>
           </div>
         </article>
 
         <!-- ===== HOSPEDAJE 4 ===== -->
-        <article class="card" data-filtros="desayuno pet">
+        <article class="card" data-filtros="desayuno pet" data-hotel-id="2">
           <div class="foto"><img src="img/hospedaje/hotel-4.jpg" alt="Foto del hotel"></div>
           <div class="card-cuerpo">
-            <h3>Nombre del hotel</h3>
+            <h3>Hotel Mina Vieja</h3>
             <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
             <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Mineral del Chico, Hidalgo</p>
             <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
             <div class="card-pie">
-              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <p class="precio">desde <strong>$1,820</strong> / noche</p>
               <a href="#" class="btn">Reservar</a>
             </div>
           </div>
         </article>
 
         <!-- ===== HOSPEDAJE 5 ===== -->
-        <article class="card" data-filtros="centro">
+        <article class="card" data-filtros="centro" data-hotel-id="5">
           <div class="foto"><img src="img/hospedaje/hotel-5.jpg" alt="Foto del hotel"></div>
           <div class="card-cuerpo">
-            <h3>Nombre del hotel</h3>
+            <h3>Hotel Santa Bárbara</h3>
             <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
             <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Huichapan, Hidalgo</p>
             <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
             <div class="card-pie">
-              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <p class="precio">desde <strong>$810</strong> / noche</p>
               <a href="#" class="btn">Reservar</a>
             </div>
           </div>
         </article>
 
         <!-- ===== HOSPEDAJE 6 ===== -->
-        <article class="card" data-filtros="alberca desayuno">
+        <article class="card" data-filtros="alberca desayuno" data-hotel-id="6">
           <div class="foto"><img src="img/hospedaje/hotel-6.jpg" alt="Foto del hotel"></div>
           <div class="card-cuerpo">
-            <h3>Nombre del hotel</h3>
+            <h3>Hotel Bugambilia</h3>
             <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
             <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Zimapán, Hidalgo</p>
             <div class="etiquetas"><span class="etiqueta">Lo que incluye</span><span class="etiqueta">Lo que incluye</span></div>
             <div class="card-pie">
-              <p class="precio">desde <strong>$$</strong> / noche</p>
+              <p class="precio">desde <strong>$780</strong> / noche</p>
               <a href="#" class="btn">Reservar</a>
             </div>
           </div>
@@ -163,11 +166,13 @@
         <a href="#">Términos</a>
         <a href="#">Privacidad</a>
         <a href="#">Contacto</a>
-        <a href="verificar.html">🔐 Propietarios: verificar QR</a>
+        <a href="verificar.php" data-rol="recepcion,admin" hidden>🔐 Propietarios: verificar QR</a>
       </div>
     </div>
   </footer>
 
+  <script src="js/validar-fechas.js"></script>
+  <script src="js/sesion.js" data-base=""></script>
   <script src="js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
   <script src="js/accesibilidad.js"></script>

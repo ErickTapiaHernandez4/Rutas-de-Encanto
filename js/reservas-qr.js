@@ -1,17 +1,50 @@
 /* =========================================================
    ALBA GUÍA — Reservación de hospedaje con código QR (IoT)
    Al reservar se genera un QR con los datos del huésped.
-   El dueño lo escanea en verificar.html.
+   El dueño lo escanea en verificar.php.
    ========================================================= */
 (function () {
-  const SECRETO = 'alba-guia-2026';   // debe ser IGUAL en verificar.html
+  const SECRETO = 'rutas-de-encanto-2026';   // debe ser IGUAL en verificar.php
 
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const dinero = n => '$' + Number(n).toLocaleString('es-MX');
   const fecha = s => new Date(s + 'T12:00').toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
-  const hoyFecha = new Date();
-  hoyFecha.setMinutes(hoyFecha.getMinutes() - hoyFecha.getTimezoneOffset());
-  const hoy = hoyFecha.toISOString().slice(0, 10);
+  const tarifasViaje = {
+    1: { economico: 220, medio: 450, premium: 850, guia: 700 },
+    2: { economico: 220, medio: 450, premium: 850, guia: 700 },
+    3: { economico: 200, medio: 400, premium: 800, guia: 600 },
+    4: { economico: 200, medio: 400, premium: 800, guia: 650 },
+    5: { economico: 180, medio: 350, premium: 700, guia: 600 },
+    6: { economico: 200, medio: 400, premium: 800, guia: 750 }
+  };
+  const hotelesCotizador = {
+    1: { nombre: 'Cabañas Bosque de Huasca', lugar: 'Huasca de Ocampo, Hidalgo' },
+    2: { nombre: 'Hotel Mina Vieja', lugar: 'Mineral del Chico, Hidalgo' },
+    3: { nombre: 'Posada Real Minera', lugar: 'Real del Monte, Hidalgo' },
+    4: { nombre: 'Hotel Tecozautla', lugar: 'Tecozautla, Hidalgo' },
+    5: { nombre: 'Hotel Santa Bárbara', lugar: 'Huichapan, Hidalgo' },
+    6: { nombre: 'Hotel Bugambilia', lugar: 'Zimapán, Hidalgo' }
+  };
+  const paginaVolver = window.location.pathname.endsWith('/planificar.html')
+    ? 'planificar.html'
+    : 'hospedaje.html';
+
+  function hotelDelCotizador(id) {
+    const hotel = hotelesCotizador[id];
+    const precio = window.RDE_PRECIOS_HOTELES && window.RDE_PRECIOS_HOTELES[id];
+    return hotel && precio ? { id: String(id), ...hotel, precio } : null;
+  }
+
+  function hotelDeTarjeta(card) {
+    const ubicacion = card.querySelector('.ubicacion');
+    const precio = card.querySelector('.precio strong');
+    return {
+      id: card.dataset.hotelId,
+      nombre: card.querySelector('h3').textContent.trim(),
+      lugar: ubicacion ? ubicacion.textContent.trim() : '',
+      precio: precio ? parseInt(precio.textContent.replace(/\D/g, ''), 10) : 0
+    };
+  }
 
   // "Firma" para detectar si alguien modifica los datos del QR
   function firmar(d) {
@@ -40,38 +73,32 @@
   }
 
   // Conecta todos los botones "Reservar" de las tarjetas
-  document.querySelectorAll('.card').forEach(card => {
+  document.querySelectorAll('.card[data-hotel-id]').forEach(card => {
     const btn = [...card.querySelectorAll('.btn')].find(b => /reservar/i.test(b.textContent));
     if (!btn) return;
     btn.addEventListener('click', e => {
       e.preventDefault();
-      const ub = card.querySelector('.ubicacion');
-      const pr = card.querySelector('.precio strong');
-      abrirReserva({
-        nombre: card.querySelector('h3').textContent.trim(),
-        lugar: ub ? ub.textContent.trim() : '',
-        precio: pr ? parseInt(pr.textContent.replace(/\D/g, ''), 10) : 0
-      });
+      abrirReserva(hotelDeTarjeta(card));
     });
   });
 
-  function abrirReserva(h) {
+  function abrirReserva(h, pre = {}) {
+    const huespedes = [1, 2, 3, 4, 5, 6].includes(Number(pre.huespedes)) ? Number(pre.huespedes) : 2;
+    const llegada = /^\d{4}-\d{2}-\d{2}$/.test(pre.llegada || '') ? pre.llegada : '';
+    const salida = /^\d{4}-\d{2}-\d{2}$/.test(pre.salida || '') ? pre.salida : '';
     AlbaModal.abrir(`
       <h3>Reservar en ${esc(h.nombre)}</h3>
       <p class="modal-sub">📍 ${esc(h.lugar)} · desde ${dinero(h.precio)} / noche</p>
       <form id="form-reserva" class="form-grid">
+        <input type="hidden" name="hotel_id" value="${esc(h.id)}">
         <div class="campo"><label for="r-llegada">Llegada</label>
-          <input id="r-llegada" type="date" name="llegada" min="${hoy}" required></div>
+          <input id="r-llegada" type="date" name="llegada" value="${llegada}" required></div>
         <div class="campo"><label for="r-salida">Salida</label>
-          <input id="r-salida" type="date" name="salida" min="${hoy}" required></div>
+          <input id="r-salida" type="date" name="salida" value="${salida}" required></div>
         <div class="campo"><label for="r-huespedes">Huéspedes</label>
-          <select id="r-huespedes" name="huespedes">
-            <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
-          </select></div>
+          <select id="r-huespedes" name="huespedes">${[1, 2, 3, 4, 5, 6].map(n => `<option ${n === huespedes ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
         <div class="campo"><label for="r-tel">Teléfono</label>
           <input id="r-tel" type="tel" name="telefono" placeholder="771 123 4567" autocomplete="tel" required></div>
-        <div class="campo completo"><label for="r-nombre">Nombre completo</label>
-          <input id="r-nombre" name="nombre" autocomplete="name" placeholder="Como aparece en tu identificación" required></div>
         <div class="campo completo"><label for="r-necesidades">¿Necesitas alguna adaptación? (opcional)</label>
           <select id="r-necesidades" name="necesidades">
             <option value="">Ninguna</option>
@@ -80,12 +107,13 @@
             <option>Apoyo por baja visión</option>
             <option>Instrucciones sencillas / acompañamiento</option>
           </select></div>
-        <p class="resumen completo" id="resumen" aria-live="polite"></p>
+        <div class="resumen completo" id="resumen" aria-live="polite"></div>
         <button class="btn btn-bloque completo" type="submit">Confirmar y generar mi QR</button>
       </form>`);
 
     const form = document.getElementById('form-reserva');
     const resumen = document.getElementById('resumen');
+    const validarFechas = configurarFechas(form.elements.llegada, form.elements.salida);
     const noches = () => Math.round((new Date(form.salida.value) - new Date(form.llegada.value)) / 86400000);
     function calcular() {
       const n = noches();
@@ -96,27 +124,175 @@
     form.addEventListener('input', calcular);
     calcular();
 
-    form.addEventListener('submit', e => {
+    function pedirSesion() {
+      try {
+        sessionStorage.setItem('rde_borrador', JSON.stringify({
+          hotel_id: Number(h.id),
+          llegada: form.elements.llegada.value,
+          salida: form.elements.salida.value,
+          huespedes: Number(form.elements.huespedes.value)
+        }));
+      } catch (error) {
+        resumen.textContent = 'No se pudo guardar tu selección en esta pestaña. Inténtalo de nuevo.';
+        return;
+      }
+      resumen.innerHTML = `
+        <strong>Para reservar necesitas una cuenta. Tu selección se guardará</strong>
+        <div class="dos-botones">
+          <a class="btn" href="php/login.php?volver=${paginaVolver}">Iniciar sesión</a>
+          <a class="btn btn-borde" href="php/registro.php?volver=${paginaVolver}">Crear cuenta</a>
+        </div>`;
+    }
+
+    form.addEventListener('submit', async e => {
       e.preventDefault();
+      const errorFecha = validarFechas();
+      if (errorFecha) { resumen.textContent = '⚠️ ' + errorFecha; return; }
       const n = noches();
-      if (!(n > 0)) { resumen.textContent = '⚠️ La salida debe ser después de la llegada.'; return; }
-      const d = {
-        app: 'AlbaGuia',
-        folio: 'AG-' + Date.now().toString(36).toUpperCase().slice(-6),
-        hotel: h.nombre,
-        lugar: h.lugar,
-        nombre: form.nombre.value.trim(),
-        telefono: form.telefono.value.trim(),
-        llegada: form.llegada.value,
-        salida: form.salida.value,
-        huespedes: Number(form.huespedes.value),
-        noches: n,
-        total: n * h.precio,
-        necesidades: form.necesidades.value
-      };
-      d.firma = firmar(d);
-      mostrarQR(d);
+      const datos = new FormData();
+      ['hotel_id', 'llegada', 'salida', 'huespedes', 'telefono'].forEach(campo => {
+        datos.append(campo, form.elements[campo].value);
+      });
+      try {
+        const sesion = await window.RDE_SESION;
+        if (!sesion.logueado) { pedirSesion(); return; }
+        const respuesta = await fetch('php/reservar.php', {
+          method: 'POST',
+          body: datos,
+          credentials: 'same-origin'
+        });
+        const resultado = await respuesta.json();
+        if (respuesta.status === 401) {
+          pedirSesion();
+          return;
+        }
+        if (respuesta.status === 422) {
+          resumen.textContent = '';
+          const lista = document.createElement('ul');
+          (resultado.errores || []).forEach(mensaje => {
+            const item = document.createElement('li');
+            item.textContent = mensaje;
+            lista.append(item);
+          });
+          resumen.append(lista);
+          return;
+        }
+        if (respuesta.status !== 201) {
+          resumen.textContent = resultado.error || 'No se pudo completar la reservación.';
+          return;
+        }
+        sessionStorage.removeItem('rde_borrador');
+        const d = {
+          app: 'AlbaGuia',
+          folio: 'RDE-' + resultado.reservacion_id,
+          hotel: h.nombre,
+          lugar: h.lugar,
+          nombre: resultado.nombre,
+          telefono: form.elements.telefono.value.trim(),
+          llegada: form.elements.llegada.value,
+          salida: form.elements.salida.value,
+          huespedes: Number(form.elements.huespedes.value),
+          noches: n,
+          total: n * h.precio,
+          necesidades: form.elements.necesidades.value
+        };
+        d.firma = firmar(d);
+        mostrarQR(d);
+      } catch (error) {
+        resumen.textContent = 'No se pudo conectar con el servidor. Inténtalo de nuevo.';
+      }
     });
+  }
+
+  window.RDE_SESION.then(sesion => {
+    if (!sesion.logueado) return;
+    let borrador;
+    try { borrador = JSON.parse(sessionStorage.getItem('rde_borrador') || 'null'); }
+    catch (error) { sessionStorage.removeItem('rde_borrador'); return; }
+    if (!borrador) return;
+    const card = [...document.querySelectorAll('.card[data-hotel-id]')]
+      .find(item => item.dataset.hotelId === String(borrador.hotel_id));
+    const huespedes = Number(borrador.huespedes);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(borrador.llegada || '') ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(borrador.salida || '') ||
+        ![1, 2, 3, 4, 5, 6].includes(huespedes)) return;
+    const hotel = card ? hotelDeTarjeta(card) : hotelDelCotizador(borrador.hotel_id);
+    if (!hotel) return;
+    abrirReserva(hotel, borrador);
+    sessionStorage.removeItem('rde_borrador');
+  });
+
+  const cotizador = document.getElementById('cotizador-viaje');
+  if (cotizador) {
+    const campoLlegada = cotizador.elements.llegada;
+    const campoResumen = document.getElementById('cotizador-resumen');
+    const botonReservar = document.getElementById('cotizador-reservar');
+    if (!campoLlegada || !campoResumen || !botonReservar) return;
+    const formatoISO = date => [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0')
+    ].join('-');
+    const hoyDate = new Date();
+    hoyDate.setMinutes(hoyDate.getMinutes() - hoyDate.getTimezoneOffset());
+    campoLlegada.min = formatoISO(hoyDate);
+    campoLlegada.value = formatoISO(hoyDate);
+
+    cotizador.addEventListener('submit', evento => evento.preventDefault());
+
+    function cotizar() {
+      const hotelId = Number(cotizador.elements.hotel_id.value);
+      const dias = Number(cotizador.elements.dias.value);
+      const huespedes = Number(cotizador.elements.huespedes.value);
+      const nivel = cotizador.elements.nivel.value;
+      const tarifa = tarifasViaje[hotelId];
+      const precioNoche = window.RDE_PRECIOS_HOTELES[hotelId];
+      if (!tarifa || !precioNoche || !Number.isInteger(dias) || dias < 2 ||
+          !campoLlegada.value || campoLlegada.value < formatoISO(hoyDate)) {
+        campoResumen.textContent = 'Elige el destino, la duración y la fecha de llegada para calcular el presupuesto.';
+        return null;
+      }
+      const noches = dias - 1;
+      const costoHospedaje = noches * precioNoche;
+      const costoComida = dias * huespedes * tarifa[nivel];
+      const costoGuia = cotizador.elements.guia.value === 'si' ? tarifa.guia : 0;
+      const total = costoHospedaje + costoComida + costoGuia;
+      campoResumen.textContent = '';
+      const lista = document.createElement('ul');
+      lista.className = 'info-lista';
+      [
+        `Hospedaje (${noches} noches × ${dinero(precioNoche)}): ${dinero(costoHospedaje)}`,
+        `Alimentación (${dias} días × ${huespedes} personas × ${dinero(tarifa[nivel])}): ${dinero(costoComida)}`,
+        `Guía opcional: ${dinero(costoGuia)}`,
+        `Presupuesto estimado: ${dinero(total)}`
+      ].forEach((linea, index) => {
+        const item = document.createElement('li');
+        if (index === 3) item.className = 'card-tipo';
+        item.textContent = linea;
+        lista.append(item);
+      });
+      campoResumen.append(lista);
+      return { hotelId, dias, huespedes, noches };
+    }
+
+    cotizador.addEventListener('input', cotizar);
+    cotizador.addEventListener('change', cotizar);
+    botonReservar.addEventListener('click', () => {
+      const cotizacion = cotizar();
+      if (!cotizacion) return;
+      const card = [...document.querySelectorAll('.card[data-hotel-id]')]
+        .find(item => item.dataset.hotelId === String(cotizacion.hotelId));
+      const fechaSalida = new Date(campoLlegada.value + 'T00:00:00');
+      fechaSalida.setDate(fechaSalida.getDate() + cotizacion.noches);
+      const hotel = card ? hotelDeTarjeta(card) : hotelDelCotizador(cotizacion.hotelId);
+      if (!hotel) return;
+      abrirReserva(hotel, {
+        llegada: campoLlegada.value,
+        salida: formatoISO(fechaSalida),
+        huespedes: cotizacion.huespedes
+      });
+    });
+    cotizar();
   }
 
   function mostrarQR(d) {

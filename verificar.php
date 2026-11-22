@@ -1,3 +1,7 @@
+<?php
+require __DIR__ . '/php/auth.php';
+requerir_permiso('validar_checkin');
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,12 +24,15 @@
       <button class="menu-btn" aria-label="Abrir menú">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
-      <nav class="nav">
+      <nav class="nav" aria-label="Principal">
         <a href="index.html">Inicio</a>
         <a href="hospedaje.html">Hospedaje</a>
         <a href="restaurantes.html">Restaurantes</a>
-        <a href="guia.html">Guía</a>
-        <a href="verificar.html" class="btn">Propietarios</a>
+        <a href="guia.html">Guías</a>
+        <a href="php/panel_guia.php" data-rol="guia,admin" hidden>Mi perfil de guía</a>
+        <a href="verificar.php" class="activo" data-rol="recepcion,admin" hidden>Verificar QR</a>
+        <a href="planificar.html" class="btn">Planifica tu viaje</a>
+        <a id="btn-sesion" href="php/login.php" class="btn">Iniciar sesión</a>
       </nav>
     </div>
   </header>
@@ -79,6 +86,7 @@
   <script src="js/main.js"></script>
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <script src="js/accesibilidad.js"></script>
+  <script src="js/sesion.js" data-base=""></script>
   <script>
   (function () {
     const SECRETO = 'rutas-de-encanto-2026';   // debe ser IGUAL al de js/reservas-qr.js

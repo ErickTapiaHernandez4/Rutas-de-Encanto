@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planifica tu viaje | Rutas de Encanto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/accesibilidad.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="contenedor">
+      <a href="index.html" class="logo">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 42V20"/><path d="M24 26c-8 0-13-6-13-14 8 0 13 6 13 14Z"/><path d="M24 26c8 0 13-6 13-14-8 0-13 6-13 14Z"/><path d="M24 20c-3-4-3-9 0-14 3 5 3 10 0 14Z"/></svg>
+        Rutas de Encanto
+      </a>
+      <button class="menu-btn" aria-label="Abrir menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="nav" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="hospedaje.html">Hospedaje</a>
+        <a href="restaurantes.html">Restaurantes</a>
+        <a href="guia.html">Guías</a>
+        <a href="php/panel_guia.php" data-rol="guia,admin" hidden>Mi perfil de guía</a>
+        <a href="verificar.php" data-rol="recepcion,admin" hidden>Verificar QR</a>
+        <a href="planificar.html" class="btn activo">Planifica tu viaje</a>
+        <a id="btn-sesion" href="php/login.php" class="btn">Iniciar sesión</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="seccion" id="planificar">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <span class="pastilla">🧾 PRESUPUESTO DE VIAJE</span>
+        <h2>Planificar tu viaje</h2>
+        <p>Calcula un estimado sin iniciar sesión; tu cotización no se envía al servidor.</p>
+        <div class="adorno"></div>
+      </div>
+      <article class="card">
+        <div class="card-cuerpo">
+          <form id="cotizador-viaje" class="form-grid">
+            <div class="campo completo">
+              <label for="cotizador-hotel">Pueblo</label>
+              <select id="cotizador-hotel" name="hotel_id">
+                <option value="1">Huasca de Ocampo</option>
+                <option value="2">Mineral del Chico</option>
+                <option value="3">Real del Monte</option>
+                <option value="4">Tecozautla</option>
+                <option value="5">Huichapan</option>
+                <option value="6">Zimapán</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="cotizador-dias">Días</label>
+              <input id="cotizador-dias" type="number" name="dias" min="2" value="2" required>
+            </div>
+            <div class="campo">
+              <label for="cotizador-personas">Personas</label>
+              <select id="cotizador-personas" name="huespedes">
+                <option>1</option><option selected>2</option><option>3</option>
+                <option>4</option><option>5</option><option>6</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="cotizador-nivel">Alimentación</label>
+              <select id="cotizador-nivel" name="nivel">
+                <option value="economico">Económico</option>
+                <option value="medio" selected>Medio</option>
+                <option value="premium">Premium</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="cotizador-llegada">Llegada</label>
+              <input id="cotizador-llegada" type="date" name="llegada" required>
+            </div>
+            <div class="campo completo">
+              <label for="cotizador-guia">Servicio de guía</label>
+              <select id="cotizador-guia" name="guia">
+                <option value="no" selected>No agregar</option>
+                <option value="si">Agregar guía (opcional)</option>
+              </select>
+            </div>
+            <div class="resumen completo" id="cotizador-resumen" aria-live="polite"></div>
+            <button class="btn btn-bloque completo" id="cotizador-reservar" type="button">Reservar este viaje</button>
+          </form>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="contenedor">
+      <span>Rutas de Encanto • Turismo responsable en Hidalgo</span>
+      <div class="footer-links">
+        <span>© 2026 Rutas de Encanto</span>
+        <a href="#">Ayuda</a>
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Contacto</a>
+        <a href="verificar.php" data-rol="recepcion,admin" hidden>🔐 Propietarios: verificar QR</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/validar-fechas.js"></script>
+  <script src="js/sesion.js" data-base=""></script>
+  <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+  <script src="js/accesibilidad.js"></script>
+  <script src="js/reservas-qr.js"></script>
+</body>
+</html>

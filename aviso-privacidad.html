@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aviso de privacidad | Rutas de Encanto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/accesibilidad.css">
+</head>
+<body>
+  <header class="header">
+    <div class="contenedor">
+      <a href="index.html" class="logo">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M24 42V20"/><path d="M24 26c-8 0-13-6-13-14 8 0 13 6 13 14Z"/><path d="M24 26c8 0 13-6 13-14-8 0-13 6-13 14Z"/><path d="M24 20c-3-4-3-9 0-14 3 5 3 10 0 14Z"/></svg>
+        Rutas de Encanto
+      </a>
+      <button class="menu-btn" aria-label="Abrir menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Inicio</a>
+        <a href="hospedaje.html">Hospedaje</a>
+        <a href="restaurantes.html">Restaurantes</a>
+        <a href="guia.html">Guías</a>
+        <a href="php/panel_guia.php" data-rol="guia,admin" hidden>Mi perfil de guía</a>
+        <a id="btn-sesion" class="btn" href="php/login.php">Iniciar sesión</a>
+      </nav>
+    </div>
+  </header>
+  <main class="seccion">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <span class="pastilla">🔒 PRIVACIDAD</span>
+        <h1>Aviso de privacidad para perfiles de guía</h1>
+        <div class="adorno"></div>
+      </div>
+      <article class="card">
+        <div class="card-cuerpo">
+          <h2>Datos que se recaban</h2>
+          <p>Rutas de Encanto utiliza el nombre, pueblo, descripción, actividades, precio aproximado, teléfono, correo, fotos y puntos de ruta que el guía proporcione para crear y administrar su perfil.</p>
+          <h2>Finalidad y publicación</h2>
+          <p>El perfil se utiliza para mostrar a visitantes información sobre las experiencias disponibles. El nombre, las fotos, el teléfono y el correo solo se publican cuando el guía marca la autorización correspondiente. Los perfiles inactivos o sin consentimiento no aparecen en la lista pública.</p>
+          <h2>Acceso y actualización</h2>
+          <p>El guía puede revisar y actualizar su perfil desde la sección “Mi perfil de guía”. También puede eliminar el perfil, las fotos asociadas y los puntos de su ruta.</p>
+          <h2>Contacto y alcance</h2>
+          <p>Este es un texto base informativo para el proyecto. Antes de usar el sitio en producción, la persona responsable debe completar los datos de contacto del responsable del tratamiento y revisar este aviso conforme a la normativa aplicable.</p>
+        </div>
+      </article>
+    </div>
+  </main>
+  <script src="js/main.js"></script>
+  <script src="js/accesibilidad.js"></script>
+  <script src="js/sesion.js" data-base=""></script>
+</body>
+</html>

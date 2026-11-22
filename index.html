@@ -21,12 +21,15 @@
       <button class="menu-btn" aria-label="Abrir menú">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
-      <nav class="nav">
+      <nav class="nav" aria-label="Principal">
         <a href="index.html" class="activo">Inicio</a>
         <a href="hospedaje.html">Hospedaje</a>
         <a href="restaurantes.html">Restaurantes</a>
-        <a href="#guias">Guías</a>
-        <a href="#buscar" class="btn">Reserva ahora</a>
+        <a href="guia.html">Guías</a>
+        <a href="php/panel_guia.php" data-rol="guia,admin" hidden>Mi perfil de guía</a>
+        <a href="verificar.php" data-rol="recepcion,admin" hidden>Verificar QR</a>
+        <a href="planificar.html" class="btn">Planifica tu viaje</a>
+        <a id="btn-sesion" href="php/login.php" class="btn">Iniciar sesión</a>
       </nav>
     </div>
   </header>
@@ -173,17 +176,17 @@
     </div>
   </section>
 
-  <!-- ========== 4. GUÍAS LOCALES CON CALIFICACIÓN ========== -->
+  <!-- ========== 4. GUÍAS DESTACADOS ========== -->
   <section class="seccion seccion-guias" id="guias">
     <div class="contenedor">
       <div class="titulo-seccion">
         <span class="pastilla">🧭 GUÍAS CERTIFICADOS</span>
-        <h2>Conoce a tus guías locales</h2>
-        <p>Gente del pueblo que te enseña lo que no viene en los mapas. ¿Ya viajaste con alguno? ¡Califícalo!</p>
+        <h2>Guías destacados</h2>
+        <p>Conoce sus recorridos y encuentra una experiencia para tu viaje.</p>
         <div class="adorno"></div>
       </div>
-      <!-- Las tarjetas se llenan solas desde js/main.js -->
-      <div class="rejilla" id="lista-guias"></div>
+      <p id="estado-guias" role="status" aria-live="polite">Cargando guías...</p>
+      <div class="rejilla" id="lista-guias" data-api="php/guias.php"></div>
     </div>
   </section>
 
@@ -228,7 +231,10 @@
   </div>
   <div class="toast" id="toast"></div>
 
+  <script src="js/validar-fechas.js"></script>
+  <script src="js/sesion.js" data-base=""></script>
   <script src="js/main.js"></script>
   <script src="js/accesibilidad.js"></script>
+  <script src="js/guias.js"></script>
 </body>
 </html>

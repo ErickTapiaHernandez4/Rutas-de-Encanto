@@ -1,4 +1,13 @@
 // ===== Menú en celular =====
+window.RDE_PRECIOS_HOTELES = {
+  1: 1450,
+  2: 1820,
+  3: 2100,
+  4: 492,
+  5: 810,
+  6: 780
+};
+
 const menuBtn = document.querySelector('.menu-btn');
 const nav = document.querySelector('.nav');
 if (menuBtn && nav) {
@@ -71,8 +80,9 @@ window.fotoVacia = function (img) {
       datos: ['🌡️ 12 – 22 °C', '🚗 40 min de Pachuca', '📅 Todo el año'],
       imperdibles: ['Prismas Basálticos', 'Hacienda Santa María Regla', 'Peña del Aire'],
       hotel: {
+        id: 1,
         nombre: 'Cabañas Bosque de Huasca', foto: 'img/hospedaje/hotel-1.jpg',
-        precio: 1450, calif: 4.8, resenas: 23, etiquetas: ['Desayuno incluido', 'Chimenea']
+        precio: window.RDE_PRECIOS_HOTELES[1], calif: 4.8, resenas: 23, etiquetas: ['Desayuno incluido', 'Chimenea']
       },
       restaurante: {
         nombre: 'Fonda La Hacienda', foto: 'img/restaurantes/restaurante-1.jpg',
@@ -92,8 +102,9 @@ window.fotoVacia = function (img) {
       datos: ['🌡️ 8 – 18 °C', '🚗 30 min de Pachuca', '🧥 Lleva chamarra'],
       imperdibles: ['Peña del Cuervo', 'Parque Nacional El Chico', 'Presa El Cedral'],
       hotel: {
+        id: 2,
         nombre: 'Hotel Mina Vieja', foto: 'img/hospedaje/hotel-2.jpg',
-        precio: 1820, calif: 4.6, resenas: 41, etiquetas: ['Vista al bosque', 'Estacionamiento']
+        precio: window.RDE_PRECIOS_HOTELES[2], calif: 4.6, resenas: 41, etiquetas: ['Vista al bosque', 'Estacionamiento']
       },
       restaurante: {
         nombre: 'Cocina El Pinar', foto: 'img/restaurantes/restaurante-2.jpg',
@@ -113,8 +124,9 @@ window.fotoVacia = function (img) {
       datos: ['🌡️ 10 – 20 °C', '🚗 20 min de Pachuca', '📅 Todo el año'],
       imperdibles: ['Mina de Acosta', 'Panteón Inglés', 'Museo del Paste'],
       hotel: {
+        id: 3,
         nombre: 'Posada Real Minera', foto: 'img/hospedaje/hotel-3.jpg',
-        precio: 2100, calif: 4.9, resenas: 12, etiquetas: ['Centro histórico', 'Wi-Fi gratis']
+        precio: window.RDE_PRECIOS_HOTELES[3], calif: 4.9, resenas: 12, etiquetas: ['Centro histórico', 'Wi-Fi gratis']
       },
       restaurante: {
         nombre: 'Pastes El Portal', foto: 'img/restaurantes/restaurante-3.jpg',
@@ -279,6 +291,7 @@ window.fotoVacia = function (img) {
   /* ======= 5. TARJETAS DE GUÍAS ======= */
   const listaGuias = document.getElementById('lista-guias');
   function renderGuias() {
+    if (!listaGuias || listaGuias.dataset.api) return;
     listaGuias.innerHTML = Object.keys(GUIAS).map(id => {
       const g = GUIAS[id], d = datosGuia(id), c = d.comentarios[0];
       const colores = ['terracota', 'olivo', ''];
@@ -325,24 +338,27 @@ window.fotoVacia = function (img) {
   /* ---- Reservar hospedaje ---- */
   function abrirReserva(id, pre = {}) {
     const p = PUEBLOS[id], h = p.hotel;
-    const huespedes = pre.huespedes || 2;
+    const huespedes = [1, 2, 3, 4, 5, 6].includes(Number(pre.huespedes)) ? Number(pre.huespedes) : 2;
+    const llegada = /^\d{4}-\d{2}-\d{2}$/.test(pre.llegada || '') ? pre.llegada : '';
+    const salida = /^\d{4}-\d{2}-\d{2}$/.test(pre.salida || '') ? pre.salida : '';
     abrirModal(`
       ${foto(h.foto, h.nombre, 'foto modal-foto')}
       <h3>Reservar en ${h.nombre}</h3>
       <p class="modal-sub">📍 ${p.nombre} · desde ${dinero(h.precio)} / noche</p>
       <form id="form-reserva" class="form-grid">
-        <div class="campo"><label>Llegada</label><input type="date" name="llegada" min="${hoy}" value="${pre.llegada || ''}" required></div>
-        <div class="campo"><label>Salida</label><input type="date" name="salida" min="${hoy}" value="${pre.salida || ''}" required></div>
-        <div class="campo"><label>Huéspedes</label>
-          <select name="huespedes">${[1, 2, 3, 4, 5, 6].map(n => `<option ${n == huespedes ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
-        <div class="campo"><label>Teléfono</label><input type="tel" name="telefono" placeholder="771 123 4567" required></div>
-        <div class="campo completo"><label>Nombre completo</label><input name="nombre" placeholder="Tu nombre" required></div>
-        <p class="resumen completo" id="resumen"></p>
+        <input type="hidden" name="hotel_id" value="${h.id}">
+        <div class="campo"><label for="r-llegada">Llegada</label><input id="r-llegada" type="date" name="llegada" min="${hoy}" value="${llegada}" required></div>
+        <div class="campo"><label for="r-salida">Salida</label><input id="r-salida" type="date" name="salida" min="${hoy}" value="${salida}" required></div>
+        <div class="campo"><label for="r-huespedes">Huéspedes</label>
+          <select id="r-huespedes" name="huespedes">${[1, 2, 3, 4, 5, 6].map(n => `<option ${n == huespedes ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
+        <div class="campo"><label for="r-telefono">Teléfono</label><input id="r-telefono" type="tel" name="telefono" placeholder="771 123 4567" required></div>
+        <div class="resumen completo" id="resumen" aria-live="polite"></div>
         <button class="btn btn-bloque completo" type="submit">Confirmar reservación</button>
       </form>`);
 
     const form = document.getElementById('form-reserva');
     const resumen = document.getElementById('resumen');
+    const validarFechas = configurarFechas(form.llegada, form.salida);
     const noches = () => Math.round((new Date(form.salida.value) - new Date(form.llegada.value)) / 86400000);
     function calcular() {
       const n = noches();
@@ -353,19 +369,62 @@ window.fotoVacia = function (img) {
     form.addEventListener('input', calcular);
     calcular();
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const n = noches();
-      if (!(n > 0)) { resumen.textContent = '⚠️ La salida debe ser después de la llegada.'; return; }
-      const nombre = esc(form.nombre.value.trim().split(' ')[0]);
-      contenido.innerHTML = `
-        <div class="exito centrado">
-          <div class="exito-icono">✅</div>
-          <h3>¡Listo, ${nombre}!</h3>
-          <p>Tu solicitud en <strong>${h.nombre}</strong> por ${n} noche${n > 1 ? 's' : ''}
-             (${dinero(n * h.precio)}) fue enviada.<br>Te llamaremos al ${esc(form.telefono.value)} para confirmar.</p>
-          <button class="btn" data-cerrar>Seguir explorando</button>
+    function pedirSesion() {
+      try {
+        sessionStorage.setItem('rde_borrador', JSON.stringify({
+          hotel_id: h.id,
+          llegada: form.llegada.value,
+          salida: form.salida.value,
+          huespedes: Number(form.huespedes.value)
+        }));
+      } catch (error) {
+        resumen.textContent = 'No se pudo guardar tu selección en esta pestaña. Inténtalo de nuevo.';
+        return;
+      }
+      resumen.innerHTML = `
+        <strong>Para reservar necesitas una cuenta. Tu selección se guardará</strong>
+        <div class="dos-botones">
+          <a class="btn" href="php/login.php?volver=index.html">Iniciar sesión</a>
+          <a class="btn btn-borde" href="php/registro.php?volver=index.html">Crear cuenta</a>
         </div>`;
+    }
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const errorFecha = validarFechas();
+      if (errorFecha) { resumen.textContent = '⚠️ ' + errorFecha; return; }
+      const n = noches();
+      try {
+        const sesion = await window.RDE_SESION;
+        if (!sesion.logueado) { pedirSesion(); return; }
+        const respuesta = await fetch('php/reservar.php', {
+          method: 'POST',
+          body: new FormData(form),
+          credentials: 'same-origin'
+        });
+        const resultado = await respuesta.json();
+        if (respuesta.status === 401) { pedirSesion(); return; }
+        if (respuesta.status === 422) {
+          resumen.textContent = '';
+          const lista = document.createElement('ul');
+          (resultado.errores || []).forEach(mensaje => {
+            const item = document.createElement('li');
+            item.textContent = mensaje;
+            lista.append(item);
+          });
+          resumen.append(lista);
+          return;
+        }
+        if (respuesta.status === 201) {
+          sessionStorage.removeItem('rde_borrador');
+          cerrarModal();
+          aviso('✅ Reservación confirmada en ' + h.nombre + ' por ' + n + ' noche' + (n > 1 ? 's' : '') + '.');
+          return;
+        }
+        resumen.textContent = resultado.error || 'No se pudo completar la reservación.';
+      } catch (error) {
+        resumen.textContent = 'No se pudo conectar con el servidor. Inténtalo de nuevo.';
+      }
     });
   }
 
@@ -474,4 +533,18 @@ window.fotoVacia = function (img) {
 
   renderPanel('huasca');
   renderGuias();
+
+  window.RDE_SESION.then(sesion => {
+    if (!sesion.logueado) return;
+    let borrador;
+    try { borrador = JSON.parse(sessionStorage.getItem('rde_borrador') || 'null'); }
+    catch (error) { sessionStorage.removeItem('rde_borrador'); return; }
+    if (!borrador) return;
+    const destino = Object.keys(PUEBLOS).find(id => String(PUEBLOS[id].hotel.id) === String(borrador.hotel_id));
+    const huespedes = Number(borrador.huespedes);
+    if (!destino || ![1, 2, 3, 4, 5, 6].includes(huespedes)) return;
+    renderPanel(destino);
+    abrirReserva(destino, borrador);
+    sessionStorage.removeItem('rde_borrador');
+  });
 })();

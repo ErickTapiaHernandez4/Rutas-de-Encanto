@@ -1,5 +1,5 @@
 /* =========================================================
-   ALBA GUÍA — Estilos generales
+   Rutas de encanto — Estilos generales
    Cambia los colores aquí y se actualiza todo el sitio
    ========================================================= */
 :root {
@@ -453,4 +453,22 @@ h1, h2, h3, .logo { font-family: 'Libre Caslon Text', Georgia, serif; line-heigh
 @media (max-width: 520px) {
   .form-grid { grid-template-columns: 1fr; }
   .slide-botones .btn { width: 100%; }
+}
+
+.aviso-contacto {
+  display: flex; flex-direction: column; align-items: center; gap: .9rem;
+  padding: 1rem; text-align: center;
+  background: var(--crema); border: 1px solid var(--borde); border-radius: var(--radio);
+}
+.aviso-contacto__acciones { display: flex; justify-content: center; gap: .8rem; }
+.aviso-contacto__acciones .btn-secundario {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: .65rem 1.3rem; border: 2px solid var(--olivo); border-radius: 10px;
+  background: transparent; color: var(--olivo); font: 700 1rem 'Nunito Sans', system-ui, sans-serif;
+  cursor: pointer; transition: background .2s, color .2s;
+}
+.aviso-contacto__acciones .btn-secundario:hover { background: var(--olivo); color: #fff; }
+@media (max-width: 480px) {
+  .aviso-contacto__acciones { width: 100%; flex-direction: column; }
+  .aviso-contacto__acciones a { width: 100%; }
 }
