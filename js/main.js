@@ -266,7 +266,7 @@ window.fotoVacia = function (img) {
             <p class="card-desc">${r.especialidad}</p>
             <p class="ubicacion">🚶 ${r.distancia}</p>
             <p class="ubicacion">🕒 ${r.horario}</p>
-            <button class="btn btn-bloque" style="margin-top:auto" data-restaurante="${id}">Ver información</button>
+            <button class="btn btn-bloque card-accion-final" data-restaurante="${id}">Ver información</button>
           </div>
         </article>
 
@@ -278,7 +278,7 @@ window.fotoVacia = function (img) {
             <div class="guia-calif">${estrellas(dg.promedio)} <strong>${dg.promedio.toFixed(1)}</strong> <span>(${dg.total} reseñas)</span></div>
             <p class="card-desc">${g.especialidades.join(' • ')}</p>
             <div class="dos-botones">
-              <button class="btn btn-borde" data-ver-guia="${p.guia}">Ver perfil</button>
+              <button class="btn-secundario" data-ver-guia="${p.guia}">Ver perfil</button>
               <button class="btn" data-calificar="${p.guia}">⭐ Calificar</button>
             </div>
           </div>
@@ -307,13 +307,13 @@ window.fotoVacia = function (img) {
               <li>🏅 ${g.experiencia} de experiencia</li>
               <li>✅ Guía certificado</li>
             </ul>
-            <div class="etiquetas" style="justify-content:center">
+            <div class="etiquetas etiquetas-centradas">
               ${g.especialidades.map((e, i) => `<span class="etiqueta ${colores[i] || ''}">${e}</span>`).join('')}
             </div>
             ${c ? `<blockquote class="guia-comentario">“${esc(c.texto)}”<span>— ${esc(c.nombre)} · ${'★'.repeat(c.estrellas)}</span></blockquote>` : ''}
             <div class="dos-botones">
               <button class="btn" data-calificar="${id}">⭐ Calificar</button>
-              <a class="btn btn-borde" href="https://wa.me/${g.whatsapp}" target="_blank" rel="noopener">💬 Contactar</a>
+              <a class="btn-secundario" href="https://wa.me/${g.whatsapp}" target="_blank" rel="noopener">💬 Contactar</a>
             </div>
           </div>
         </article>`;
@@ -385,7 +385,7 @@ window.fotoVacia = function (img) {
         <strong>Para reservar necesitas una cuenta. Tu selección se guardará</strong>
         <div class="dos-botones">
           <a class="btn" href="php/login.php?volver=index.html">Iniciar sesión</a>
-          <a class="btn btn-borde" href="php/registro.php?volver=index.html">Crear cuenta</a>
+          <a class="btn-secundario" href="php/registro.php?volver=index.html">Crear cuenta</a>
         </div>`;
     }
 
@@ -445,7 +445,7 @@ window.fotoVacia = function (img) {
       </ul>
       <div class="dos-botones">
         <a class="btn" href="${mapa}" target="_blank" rel="noopener">🗺️ Cómo llegar</a>
-        <a class="btn btn-borde" href="tel:${r.telefono.replace(/\s/g, '')}">📞 Llamar</a>
+        <a class="btn-secundario" href="tel:${r.telefono.replace(/\s/g, '')}">📞 Llamar</a>
       </div>`);
   }
 
@@ -457,7 +457,7 @@ window.fotoVacia = function (img) {
     abrirModal(`
       <div class="centrado">
         ${foto(g.foto, g.nombre, 'foto avatar')}
-        <h3 style="margin-top:1rem">Califica a ${g.nombre}</h3>
+        <h3 class="mt-4">Califica a ${g.nombre}</h3>
         <p class="modal-sub">¿Cómo fue tu experiencia en ${g.pueblo}?</p>
       </div>
       <form id="form-calif">

@@ -53,28 +53,30 @@ $nav_href = 'registro.php' . ($volver !== '' ? '?volver=' . rawurlencode($volver
 <body class="auth">
     <?php require __DIR__ . '/_encabezado.php'; ?>
     <main class="auth-main">
-        <section class="auth-card">
-            <h1>Iniciar sesión</h1>
-            <p class="sub">Accede para reservar tu próxima experiencia.</p>
-            <?php if (($_GET['registro'] ?? '') === 'ok'): ?>
-                <p class="auth-aviso ok" role="status">Cuenta creada. Ya puedes iniciar sesión.</p>
-            <?php endif; ?>
-            <?php if ($error): ?>
-                <p class="auth-aviso error" role="alert"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
-            <?php endif; ?>
+        <section class="card auth-card">
+            <div class="card-cuerpo">
+                <h1>Iniciar sesión</h1>
+                <p class="sub">Accede para reservar tu próxima experiencia.</p>
+                <?php if (($_GET['registro'] ?? '') === 'ok'): ?>
+                    <p class="auth-aviso ok" role="status">Cuenta creada. Ya puedes iniciar sesión.</p>
+                <?php endif; ?>
+                <?php if ($error): ?>
+                    <p class="auth-aviso error" role="alert"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+                <?php endif; ?>
 
-            <form method="post">
-                <div class="campo">
-                    <label for="correo">Correo</label>
-                    <input id="correo" type="email" name="correo" autocomplete="email" required>
-                </div>
-                <div class="campo">
-                    <label for="password">Contraseña</label>
-                    <input id="password" type="password" name="password" autocomplete="current-password" required>
-                </div>
-                <button class="btn btn-bloque" type="submit">Entrar</button>
-            </form>
-            <p class="auth-pie">¿No tienes cuenta? <a href="registro.php">Regístrate</a></p>
+                <form method="post">
+                    <div class="campo">
+                        <label for="correo">Correo</label>
+                        <input id="correo" type="email" name="correo" autocomplete="email" required>
+                    </div>
+                    <div class="campo">
+                        <label for="password">Contraseña</label>
+                        <input id="password" type="password" name="password" autocomplete="current-password" required>
+                    </div>
+                    <button class="btn btn-bloque" type="submit">Entrar</button>
+                </form>
+                <p class="auth-pie">¿No tienes cuenta? <a href="registro.php">Regístrate</a></p>
+            </div>
         </section>
     </main>
     <script src="../js/main.js"></script>

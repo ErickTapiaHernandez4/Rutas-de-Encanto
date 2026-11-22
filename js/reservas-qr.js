@@ -140,7 +140,7 @@
         <strong>Para reservar necesitas una cuenta. Tu selección se guardará</strong>
         <div class="dos-botones">
           <a class="btn" href="php/login.php?volver=${paginaVolver}">Iniciar sesión</a>
-          <a class="btn btn-borde" href="php/registro.php?volver=${paginaVolver}">Crear cuenta</a>
+          <a class="btn-secundario" href="php/registro.php?volver=${paginaVolver}">Crear cuenta</a>
         </div>`;
     }
 
@@ -313,7 +313,7 @@
       </ul>
       <div class="dos-botones">
         <button class="btn" id="qr-descargar">⬇️ Descargar QR</button>
-        <button class="btn btn-borde" onclick="window.print()">🖨️ Imprimir</button>
+        <button class="btn-secundario" onclick="window.print()">🖨️ Imprimir</button>
       </div>`;
 
     // Los acentos y la ñ se guardan como \u00e1, etc. para que cualquier lector los entienda

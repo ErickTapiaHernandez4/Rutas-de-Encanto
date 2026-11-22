@@ -59,35 +59,37 @@ $nav_href = 'login.php' . ($volver !== '' ? '?volver=' . rawurlencode($volver) :
 <body class="auth">
     <?php require __DIR__ . '/_encabezado.php'; ?>
     <main class="auth-main">
-        <section class="auth-card">
-            <h1>Crear cuenta</h1>
-            <p class="sub">Únete para organizar tus próximas rutas.</p>
-            <?php if ($errores): ?>
-                <div class="auth-aviso error" role="alert">
-                    <ul>
-                        <?php foreach ($errores as $e): ?>
-                            <li><?= htmlspecialchars($e, ENT_QUOTES, 'UTF-8') ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
+        <section class="card auth-card">
+            <div class="card-cuerpo">
+                <h1>Crear cuenta</h1>
+                <p class="sub">Únete para organizar tus próximas rutas.</p>
+                <?php if ($errores): ?>
+                    <div class="auth-aviso error" role="alert">
+                        <ul>
+                            <?php foreach ($errores as $e): ?>
+                                <li><?= htmlspecialchars($e, ENT_QUOTES, 'UTF-8') ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
 
-            <form method="post">
-                <div class="campo">
-                    <label for="nombre">Nombre</label>
-                    <input id="nombre" type="text" name="nombre" value="<?= htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') ?>" autocomplete="name" required>
-                </div>
-                <div class="campo">
-                    <label for="correo">Correo</label>
-                    <input id="correo" type="email" name="correo" value="<?= htmlspecialchars($correo, ENT_QUOTES, 'UTF-8') ?>" autocomplete="email" required>
-                </div>
-                <div class="campo">
-                    <label for="password">Contraseña (mínimo 8 caracteres)</label>
-                    <input id="password" type="password" name="password" autocomplete="new-password" required>
-                </div>
-                <button class="btn btn-bloque" type="submit">Registrarme</button>
-            </form>
-            <p class="auth-pie">¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>
+                <form method="post">
+                    <div class="campo">
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" type="text" name="nombre" value="<?= htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') ?>" autocomplete="name" required>
+                    </div>
+                    <div class="campo">
+                        <label for="correo">Correo</label>
+                        <input id="correo" type="email" name="correo" value="<?= htmlspecialchars($correo, ENT_QUOTES, 'UTF-8') ?>" autocomplete="email" required>
+                    </div>
+                    <div class="campo">
+                        <label for="password">Contraseña (mínimo 8 caracteres)</label>
+                        <input id="password" type="password" name="password" autocomplete="new-password" required>
+                    </div>
+                    <button class="btn btn-bloque" type="submit">Registrarme</button>
+                </form>
+                <p class="auth-pie">¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>
+            </div>
         </section>
     </main>
     <script src="../js/main.js"></script>

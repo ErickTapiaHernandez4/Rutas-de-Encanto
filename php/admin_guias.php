@@ -113,7 +113,7 @@ $csrf = csrf_token();
   <?php require __DIR__ . '/_encabezado.php'; ?>
   <main class="seccion">
     <div class="contenedor">
-      <div class="titulo-seccion">
+      <div class="titulo-seccion titulo-pagina">
         <span class="pastilla">⚙️ ADMINISTRACIÓN</span>
         <h1>Administrar guías</h1>
         <p>Crea cuentas de guía y controla qué perfiles se publican.</p>
@@ -134,7 +134,7 @@ $csrf = csrf_token();
         </div>
       <?php endif; ?>
 
-      <section class="card" style="margin-bottom:1.5rem">
+      <section class="card stack-card">
         <div class="card-cuerpo">
           <h2>Crear cuenta de guía</h2>
           <p class="card-desc">La cuenta recibe el rol de guía desde el servidor. La contraseña temporal se genera y se muestra una sola vez.</p>
@@ -171,7 +171,7 @@ $csrf = csrf_token();
                     <p><?= (int) $perfil['consentimiento_datos'] === 1 ? 'Consentimiento registrado' : 'Sin consentimiento' ?></p>
                     <p><?= (int) $perfil['activo'] === 1 ? 'Activo' : 'Inactivo' ?></p>
                     <div class="dos-botones">
-                      <a class="btn btn-borde" href="panel_guia.php?guia_id=<?= (int) $perfil['id'] ?>">Editar perfil</a>
+                      <a class="btn-secundario" href="panel_guia.php?guia_id=<?= (int) $perfil['id'] ?>">Editar perfil</a>
                       <form method="post">
                         <input type="hidden" name="csrf_token" value="<?= admin_guias_h($csrf) ?>">
                         <input type="hidden" name="accion" value="cambiar_estado">

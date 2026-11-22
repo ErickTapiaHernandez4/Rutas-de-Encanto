@@ -598,7 +598,7 @@ $rutaInicial = array_map(static function (array $punto): array {
   <?php require __DIR__ . '/_encabezado.php'; ?>
   <main class="seccion">
     <div class="contenedor">
-      <div class="titulo-seccion">
+      <div class="titulo-seccion titulo-pagina">
         <span class="pastilla">🧭 PERFIL DE GUÍA</span>
         <h1>Mi perfil de guía</h1>
         <p>Administra tu información pública, tus fotos y la ruta que ofreces.</p>
@@ -606,7 +606,7 @@ $rutaInicial = array_map(static function (array $punto): array {
       </div>
 
       <?php if ($esAdmin): ?>
-        <section class="card" style="margin-bottom:1.5rem">
+        <section class="card stack-card">
           <div class="card-cuerpo">
             <h2>Seleccionar perfil</h2>
             <form method="get" class="form-grid">
@@ -623,7 +623,7 @@ $rutaInicial = array_map(static function (array $punto): array {
               </div>
               <button class="btn" type="submit">Abrir perfil</button>
             </form>
-            <form method="get" class="form-grid" style="margin-top:1rem">
+            <form method="get" class="form-grid stack-form">
               <div class="campo">
                 <label for="usuario_id">Crear perfil para cuenta de guía</label>
                 <select id="usuario_id" name="usuario_id">
@@ -635,7 +635,7 @@ $rutaInicial = array_map(static function (array $punto): array {
                   <?php endforeach; ?>
                 </select>
               </div>
-              <button class="btn btn-borde" type="submit">Abrir cuenta</button>
+              <button class="btn-secundario" type="submit">Abrir cuenta</button>
             </form>
             <p class="auth-pie"><a href="admin_guias.php">Administrar cuentas y publicación de guías</a></p>
           </div>
@@ -653,7 +653,7 @@ $rutaInicial = array_map(static function (array $punto): array {
         <?php if (!$perfil && $usuarioDestinoId === null): ?>
           <p class="auth-aviso">Selecciona un perfil o una cuenta de guía para continuar.</p>
         <?php else: ?>
-          <section class="card" style="margin-bottom:1.5rem">
+          <section class="card stack-card">
             <div class="card-cuerpo">
               <h2><?= $perfil ? 'Editar perfil' : 'Crear perfil' ?></h2>
               <p class="card-desc">Los campos con datos públicos solo se mostrarán si autorizas su publicación y el perfil está activo.</p>
@@ -688,7 +688,7 @@ $rutaInicial = array_map(static function (array $punto): array {
                     <label for="descripcion">Descripción (máximo 1000 caracteres)</label>
                     <textarea id="descripcion" name="descripcion" maxlength="1000" rows="4"><?= panel_h($formulario['descripcion']) ?></textarea>
                   </div>
-                  <fieldset class="completo" style="border:0">
+                  <fieldset class="completo fieldset-reset">
                     <legend>Actividades</legend>
                     <div class="etiquetas">
                       <?php foreach ($actividadesDisponibles as $clave => $etiqueta): ?>
@@ -704,7 +704,7 @@ $rutaInicial = array_map(static function (array $punto): array {
                     <input id="precio_aprox" name="precio_aprox" type="number" min="0" max="99999999.99" step="0.01" value="<?= panel_h($formulario['precio_aprox']) ?>" required>
                   </div>
                   <div class="completo">
-                    <label style="display:flex;align-items:flex-start;gap:.5rem">
+                    <label class="consentimiento-label">
                       <input type="checkbox" name="consentimiento_datos" value="1" <?= $consentimientoMarcado ? 'checked' : '' ?>>
                       Autorizo publicar mi nombre, fotos, teléfono y correo en el sitio, conforme al
                       <a href="../aviso-privacidad.html" target="_blank" rel="noopener">aviso de privacidad</a>.
@@ -718,7 +718,7 @@ $rutaInicial = array_map(static function (array $punto): array {
           </section>
 
           <?php if ($perfil): ?>
-            <section class="card" style="margin-bottom:1.5rem">
+            <section class="card stack-card">
               <div class="card-cuerpo">
                 <h2>Fotos del perfil (<?= count($fotosPerfil) ?>/5)</h2>
                 <?php if ($fotosPerfil): ?>
@@ -736,7 +736,7 @@ $rutaInicial = array_map(static function (array $punto): array {
                             <input type="hidden" name="csrf_token" value="<?= panel_h($csrf) ?>">
                             <input type="hidden" name="accion" value="eliminar_foto">
                             <input type="hidden" name="foto_id" value="<?= (int) $foto['id'] ?>">
-                            <button class="btn btn-borde" type="submit">Eliminar foto</button>
+                            <button class="btn-secundario" type="submit">Eliminar foto</button>
                           </form>
                         </div>
                       </article>
@@ -744,7 +744,7 @@ $rutaInicial = array_map(static function (array $punto): array {
                   </div>
                 <?php endif; ?>
                 <?php if (count($fotosPerfil) < 5): ?>
-                  <form method="post" enctype="multipart/form-data" action="<?= panel_h($actionUrl) ?>" style="margin-top:1rem">
+                  <form method="post" enctype="multipart/form-data" action="<?= panel_h($actionUrl) ?>" class="stack-form">
                     <input type="hidden" name="csrf_token" value="<?= panel_h($csrf) ?>">
                     <input type="hidden" name="accion" value="subir_fotos">
                     <div class="campo">
@@ -757,11 +757,11 @@ $rutaInicial = array_map(static function (array $punto): array {
               </div>
             </section>
 
-            <section class="card" style="margin-bottom:1.5rem">
+            <section class="card stack-card">
               <div class="card-cuerpo">
                 <h2>Ruta del guía</h2>
                 <p class="card-desc">Haz clic en el mapa para agregar un punto. Puedes cambiar su nombre, moverlo o eliminarlo. Máximo 15 puntos.</p>
-                <div id="mapa-ruta-guia" role="region" aria-label="Mapa para editar la ruta" style="height:340px;border-radius:14px"></div>
+                <div id="mapa-ruta-guia" class="mapa-ruta" role="region" aria-label="Mapa para editar la ruta"></div>
                 <p id="estado-ruta-guia" class="resumen" role="status" aria-live="polite">Cargando mapa...</p>
                 <form id="form-ruta-guia" method="post" action="<?= panel_h($actionUrl) ?>">
                   <input type="hidden" name="csrf_token" value="<?= panel_h($csrf) ?>">
@@ -781,7 +781,7 @@ $rutaInicial = array_map(static function (array $punto): array {
                   <form method="post" action="<?= panel_h($actionUrl) ?>" onsubmit="return confirm('¿Eliminar tu perfil y todos sus datos? Esta acción no se puede deshacer.');">
                     <input type="hidden" name="csrf_token" value="<?= panel_h($csrf) ?>">
                     <input type="hidden" name="accion" value="eliminar_perfil">
-                    <button class="btn btn-borde" type="submit">Eliminar mi perfil y mis datos</button>
+                    <button class="btn-secundario" type="submit">Eliminar mi perfil y mis datos</button>
                   </form>
                 </div>
               </section>

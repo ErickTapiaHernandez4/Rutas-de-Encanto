@@ -187,7 +187,7 @@
     const correo = texto(guia.correo);
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
       const enlaceCorreo = document.createElement('a');
-      enlaceCorreo.className = 'btn btn-borde';
+      enlaceCorreo.className = 'btn btn-secundario';
       enlaceCorreo.href = 'mailto:' + correo;
       enlaceCorreo.textContent = 'Correo: ' + correo;
       botones.append(enlaceCorreo);
@@ -222,7 +222,7 @@
       const numero = indice + 1;
       const icono = L.divIcon({
         className: '',
-        html: '<span style="display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#B5642F;color:#fff;font-weight:800;border:2px solid #fff">' + numero + '</span>',
+        html: '<span class="marcador-ruta-numero">' + numero + '</span>',
         iconSize: [28, 28],
         iconAnchor: [14, 14]
       });

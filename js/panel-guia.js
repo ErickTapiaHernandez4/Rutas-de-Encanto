@@ -44,21 +44,21 @@
       acciones.className = 'dos-botones';
       const subir = document.createElement('button');
       subir.type = 'button';
-      subir.className = 'btn btn-borde';
+      subir.className = 'btn btn-secundario';
       subir.textContent = 'Subir';
       subir.disabled = indice === 0;
       subir.dataset.moverPunto = String(indice - 1);
       subir.setAttribute('aria-label', 'Subir punto ' + (indice + 1));
       const bajar = document.createElement('button');
       bajar.type = 'button';
-      bajar.className = 'btn btn-borde';
+      bajar.className = 'btn btn-secundario';
       bajar.textContent = 'Bajar';
       bajar.disabled = indice === puntos.length - 1;
       bajar.dataset.moverPunto = String(indice + 1);
       bajar.setAttribute('aria-label', 'Bajar punto ' + (indice + 1));
       const eliminar = document.createElement('button');
       eliminar.type = 'button';
-      eliminar.className = 'btn btn-borde';
+      eliminar.className = 'btn btn-secundario';
       eliminar.textContent = 'Eliminar';
       eliminar.dataset.eliminarPunto = String(indice);
       eliminar.setAttribute('aria-label', 'Eliminar punto ' + (indice + 1));
@@ -82,7 +82,7 @@
       const numero = indice + 1;
       const icono = L.divIcon({
         className: '',
-        html: '<span style="display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#B5642F;color:#fff;font-weight:800;border:2px solid #fff">' + numero + '</span>',
+        html: '<span class="marcador-ruta-numero">' + numero + '</span>',
         iconSize: [28, 28],
         iconAnchor: [14, 14]
       });

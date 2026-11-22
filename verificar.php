@@ -46,7 +46,7 @@ requerir_permiso('validar_checkin');
     </div>
   </section>
 
-  <section class="seccion" style="padding-top:1rem">
+  <section class="seccion seccion--compacta">
     <div class="contenedor verif-grid">
 
       <!-- Escáner -->
@@ -56,7 +56,7 @@ requerir_permiso('validar_checkin');
           <div id="lector" class="verif-lector"></div>
           <button class="btn btn-bloque" id="btn-camara">📷 Escanear con cámara</button>
           <input type="file" id="archivo-qr" accept="image/*" class="a11y-oculto">
-          <label class="btn btn-borde btn-bloque" for="archivo-qr">🖼️ Subir foto del QR</label>
+          <label class="btn-secundario btn-bloque" for="archivo-qr">🖼️ Subir foto del QR</label>
           <ol class="verif-pasos">
             <li>Pide al huésped su código QR.</li>
             <li>Apunta la cámara al código.</li>
@@ -187,7 +187,7 @@ requerir_permiso('validar_checkin');
           </ul>` : ''}
           <div class="dos-botones">
             ${puedeRegistrar ? '<button class="btn" id="btn-checkin">✔️ Registrar llegada</button>' : ''}
-            <button class="btn btn-borde" id="btn-otro">🔄 Escanear otro</button>
+            <button class="btn-secundario" id="btn-otro">🔄 Escanear otro</button>
           </div>
         </div>`;
 
