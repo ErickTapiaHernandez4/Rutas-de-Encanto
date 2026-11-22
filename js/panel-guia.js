@@ -32,9 +32,21 @@
       nombre.type = 'text';
       nombre.maxLength = 120;
       nombre.value = punto.nombre;
-      nombre.setAttribute('aria-label', 'Nombre del punto ' + (indice + 1));
+      nombre.id = 'nombre-punto-' + indice;
       nombre.dataset.nombrePunto = String(indice);
-      elemento.append(nombre);
+      nombre.placeholder = 'Ej. Plaza principal';
+      nombre.setAttribute('aria-describedby', 'ayuda-nombre-punto-' + indice);
+      const campoNombre = document.createElement('div');
+      campoNombre.className = 'campo';
+      const etiquetaNombre = document.createElement('label');
+      etiquetaNombre.htmlFor = nombre.id;
+      etiquetaNombre.textContent = 'Nombre del punto ' + (indice + 1);
+      const ayudaNombre = document.createElement('small');
+      ayudaNombre.className = 'ayuda';
+      ayudaNombre.id = 'ayuda-nombre-punto-' + indice;
+      ayudaNombre.textContent = 'Hasta 120 caracteres.';
+      campoNombre.append(etiquetaNombre, nombre, ayudaNombre);
+      elemento.append(campoNombre);
 
       const coordenadas = document.createElement('span');
       coordenadas.textContent = punto.latitud.toFixed(5) + ', ' + punto.longitud.toFixed(5);

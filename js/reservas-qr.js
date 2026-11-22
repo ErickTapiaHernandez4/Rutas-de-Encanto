@@ -83,30 +83,36 @@
   });
 
   function abrirReserva(h, pre = {}) {
-    const huespedes = [1, 2, 3, 4, 5, 6].includes(Number(pre.huespedes)) ? Number(pre.huespedes) : 2;
+    const huespedes = Number.isInteger(Number(pre.huespedes)) && Number(pre.huespedes) >= 1 && Number(pre.huespedes) <= 10
+      ? Number(pre.huespedes)
+      : 2;
     const llegada = /^\d{4}-\d{2}-\d{2}$/.test(pre.llegada || '') ? pre.llegada : '';
     const salida = /^\d{4}-\d{2}-\d{2}$/.test(pre.salida || '') ? pre.salida : '';
     AlbaModal.abrir(`
       <h3>Reservar en ${esc(h.nombre)}</h3>
       <p class="modal-sub">📍 ${esc(h.lugar)} · desde ${dinero(h.precio)} / noche</p>
-      <form id="form-reserva" class="form-grid">
+      <form id="form-reserva" class="form-grid" data-validar-form novalidate>
         <input type="hidden" name="hotel_id" value="${esc(h.id)}">
         <div class="campo"><label for="r-llegada">Llegada</label>
-          <input id="r-llegada" type="date" name="llegada" value="${llegada}" required></div>
+          <input id="r-llegada" type="date" name="llegada" value="${llegada}" data-validacion="llegada" required aria-describedby="ayuda-r-llegada">
+          <small class="ayuda" id="ayuda-r-llegada">Elige una fecha desde hoy.</small></div>
         <div class="campo"><label for="r-salida">Salida</label>
-          <input id="r-salida" type="date" name="salida" value="${salida}" required></div>
+          <input id="r-salida" type="date" name="salida" value="${salida}" data-validacion="salida" required aria-describedby="ayuda-r-salida">
+          <small class="ayuda" id="ayuda-r-salida">Debe ser posterior a la llegada.</small></div>
         <div class="campo"><label for="r-huespedes">Huéspedes</label>
-          <select id="r-huespedes" name="huespedes">${[1, 2, 3, 4, 5, 6].map(n => `<option ${n === huespedes ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
+          <select id="r-huespedes" name="huespedes" data-validacion="huespedes" required aria-describedby="ayuda-r-huespedes">${Array.from({ length: 10 }, (_, i) => i + 1).map(n => `<option ${n === huespedes ? 'selected' : ''}>${n}</option>`).join('')}</select>
+          <small class="ayuda" id="ayuda-r-huespedes">Elige de 1 a 10 huéspedes.</small></div>
         <div class="campo"><label for="r-tel">Teléfono</label>
-          <input id="r-tel" type="tel" name="telefono" placeholder="771 123 4567" autocomplete="tel" required></div>
+          <input id="r-tel" type="tel" name="telefono" inputmode="numeric" maxlength="10" placeholder="Ej. 7711234567" autocomplete="tel" data-validacion="telefono" required aria-describedby="ayuda-r-tel">
+          <small class="ayuda" id="ayuda-r-tel">10 dígitos, sin espacios ni guiones.</small></div>
         <div class="campo completo"><label for="r-necesidades">¿Necesitas alguna adaptación? (opcional)</label>
-          <select id="r-necesidades" name="necesidades">
+          <select id="r-necesidades" name="necesidades" aria-describedby="ayuda-r-necesidades">
             <option value="">Ninguna</option>
             <option>Habitación en planta baja / silla de ruedas</option>
             <option>Comunicación por texto o Lengua de Señas</option>
             <option>Apoyo por baja visión</option>
             <option>Instrucciones sencillas / acompañamiento</option>
-          </select></div>
+          </select><small class="ayuda" id="ayuda-r-necesidades">Selecciona una adaptación si la necesitas.</small></div>
         <div class="resumen completo" id="resumen" aria-live="polite"></div>
         <button class="btn btn-bloque completo" type="submit">Confirmar y generar mi QR</button>
       </form>`);
@@ -167,14 +173,18 @@
           return;
         }
         if (respuesta.status === 422) {
-          resumen.textContent = '';
+          resumen.replaceChildren();
+          const noAsignados = window.RDE_VALIDACION
+            ? window.RDE_VALIDACION.mostrarErrores(form, resultado.errores)
+            : (Array.isArray(resultado.errores) ? resultado.errores : Object.values(resultado.errores || {}));
           const lista = document.createElement('ul');
-          (resultado.errores || []).forEach(mensaje => {
+          noAsignados.forEach(mensaje => {
             const item = document.createElement('li');
             item.textContent = mensaje;
             lista.append(item);
           });
-          resumen.append(lista);
+          if (noAsignados.length) resumen.append(lista);
+          else resumen.textContent = 'Corrige los campos marcados e inténtalo de nuevo.';
           return;
         }
         if (respuesta.status !== 201) {
@@ -215,7 +225,7 @@
     const huespedes = Number(borrador.huespedes);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(borrador.llegada || '') ||
         !/^\d{4}-\d{2}-\d{2}$/.test(borrador.salida || '') ||
-        ![1, 2, 3, 4, 5, 6].includes(huespedes)) return;
+        !Number.isInteger(huespedes) || huespedes < 1 || huespedes > 10) return;
     const hotel = card ? hotelDeTarjeta(card) : hotelDelCotizador(borrador.hotel_id);
     if (!hotel) return;
     abrirReserva(hotel, borrador);

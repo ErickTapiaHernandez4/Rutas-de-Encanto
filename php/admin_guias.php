@@ -92,6 +92,12 @@ $stmt = $pdo->prepare(
 );
 $stmt->execute();
 $perfiles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$perfilesPendientes = array_values(array_filter(
+    $perfiles,
+    static function (array $perfil): bool {
+        return (int) $perfil['activo'] === 0 && (int) $perfil['consentimiento_datos'] === 1;
+    }
+));
 
 $nav_texto = 'Mi cuenta';
 $nav_href = 'login.php';
@@ -156,6 +162,37 @@ $csrf = csrf_token();
         </div>
       </section>
 
+      <section class="card stack-card">
+        <div class="card-cuerpo">
+          <h2>Perfiles pendientes de aprobación</h2>
+          <?php if (!$perfilesPendientes): ?>
+            <p class="card-desc">No hay perfiles pendientes con consentimiento registrado.</p>
+          <?php else: ?>
+            <div class="rejilla">
+              <?php foreach ($perfilesPendientes as $perfil): ?>
+                <article class="card">
+                  <div class="card-cuerpo">
+                    <h3><?= admin_guias_h($perfil['nombre']) ?></h3>
+                    <p class="guia-pueblo"><?= admin_guias_h($perfil['pueblo']) ?></p>
+                    <p>Consentimiento registrado · En revisión</p>
+                    <div class="dos-botones">
+                      <a class="btn-secundario" href="panel_guia.php?guia_id=<?= (int) $perfil['id'] ?>">Revisar perfil</a>
+                      <form method="post">
+                        <input type="hidden" name="csrf_token" value="<?= admin_guias_h($csrf) ?>">
+                        <input type="hidden" name="accion" value="cambiar_estado">
+                        <input type="hidden" name="guia_id" value="<?= (int) $perfil['id'] ?>">
+                        <input type="hidden" name="activo" value="1">
+                        <button class="btn" type="submit">Aprobar</button>
+                      </form>
+                    </div>
+                  </div>
+                </article>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
+        </div>
+      </section>
+
       <section class="card">
         <div class="card-cuerpo">
           <h2>Perfiles de guía</h2>
@@ -172,15 +209,17 @@ $csrf = csrf_token();
                     <p><?= (int) $perfil['activo'] === 1 ? 'Activo' : 'Inactivo' ?></p>
                     <div class="dos-botones">
                       <a class="btn-secundario" href="panel_guia.php?guia_id=<?= (int) $perfil['id'] ?>">Editar perfil</a>
-                      <form method="post">
-                        <input type="hidden" name="csrf_token" value="<?= admin_guias_h($csrf) ?>">
-                        <input type="hidden" name="accion" value="cambiar_estado">
-                        <input type="hidden" name="guia_id" value="<?= (int) $perfil['id'] ?>">
-                        <input type="hidden" name="activo" value="<?= (int) $perfil['activo'] === 1 ? '0' : '1' ?>">
-                        <button class="btn" type="submit">
-                          <?= (int) $perfil['activo'] === 1 ? 'Desactivar' : 'Activar' ?>
-                        </button>
-                      </form>
+                      <?php if ((int) $perfil['activo'] === 1): ?>
+                        <form method="post">
+                          <input type="hidden" name="csrf_token" value="<?= admin_guias_h($csrf) ?>">
+                          <input type="hidden" name="accion" value="cambiar_estado">
+                          <input type="hidden" name="guia_id" value="<?= (int) $perfil['id'] ?>">
+                          <input type="hidden" name="activo" value="0">
+                          <button class="btn-secundario" type="submit">Desactivar</button>
+                        </form>
+                      <?php elseif ((int) $perfil['consentimiento_datos'] !== 1): ?>
+                        <span class="ayuda">Sin consentimiento; no se puede aprobar.</span>
+                      <?php endif; ?>
                     </div>
                   </div>
                 </article>

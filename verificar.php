@@ -37,7 +37,7 @@ requerir_permiso('validar_checkin');
     </div>
   </header>
 
-  <section class="cabecera-pagina">
+  <section class="cabecera-pagina cabecera-pagina--izquierda">
     <div class="contenedor">
       <span class="pastilla">🔐 ACCESO PARA PROPIETARIOS</span>
       <h1>Verificar reservación con QR</h1>

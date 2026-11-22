@@ -7,6 +7,12 @@ function panel_h($valor): string {
     return htmlspecialchars((string) $valor, ENT_QUOTES, 'UTF-8');
 }
 
+function panel_error(string $campo, string $mensaje): void {
+    global $errores, $erroresCampo;
+    $errores[] = $mensaje;
+    $erroresCampo[$campo] = $mensaje;
+}
+
 function panel_ruta_foto($ruta): ?string {
     if (!is_string($ruta)
         || strpos($ruta, '..') !== false
@@ -37,6 +43,7 @@ function panel_eliminar_archivo_foto($ruta): bool {
 $usuario = usuario_actual();
 $esAdmin = $usuario['rol'] === 'admin';
 $errores = [];
+$erroresCampo = [];
 $mensaje = '';
 $perfil = null;
 $perfilSeleccionadoPorId = false;
@@ -133,9 +140,10 @@ $formulario = [
         : [],
 ];
 $consentimientoMarcado = $perfil ? (int) $perfil['consentimiento_datos'] === 1 : false;
+$ocultarPerfilMarcado = !$perfil || (int) $perfil['activo'] === 0;
 
 if (($_GET['guardado'] ?? '') === 'publico') {
-    $mensaje = 'Perfil guardado con consentimiento para publicarlo.';
+    $mensaje = 'Cambios guardados.';
 } elseif (($_GET['guardado'] ?? '') === 'privado') {
     $mensaje = 'Perfil guardado sin consentimiento. Se mantendrá inactivo y no aparecerá en el sitio público.';
 } elseif (($_GET['eliminado'] ?? '') === '1') {
@@ -161,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_string($accion)) {
         $errores[] = 'La acción solicitada no es válida.';
     } elseif ($accion === 'guardar_perfil') {
-        foreach (['nombre', 'telefono', 'correo', 'descripcion', 'precio_aprox'] as $campo) {
+        foreach (['nombre', 'correo', 'descripcion', 'precio_aprox'] as $campo) {
             if (!isset($_POST[$campo]) || !is_string($_POST[$campo])) {
                 $_POST[$campo] = '';
             }
@@ -170,11 +178,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $formulario['pueblo_id'] = isset($_POST['pueblo_id']) && is_string($_POST['pueblo_id'])
             ? $_POST['pueblo_id']
             : '';
-        $formulario['telefono'] = trim($_POST['telefono']);
+        $formulario['telefono'] = isset($_POST['telefono']) && is_string($_POST['telefono'])
+            ? $_POST['telefono']
+            : '';
         $formulario['correo'] = trim($_POST['correo']);
-        $formulario['descripcion'] = trim($_POST['descripcion']);
+        $formulario['descripcion'] = $_POST['descripcion'];
         $formulario['precio_aprox'] = trim($_POST['precio_aprox']);
         $consentimientoMarcado = ($_POST['consentimiento_datos'] ?? '') === '1';
+        $ocultarPerfilMarcado = ($_POST['ocultar_perfil'] ?? '') === '1';
 
         $actividadesEnviadas = $_POST['actividades'] ?? [];
         if (!is_array($actividadesEnviadas)) {
@@ -197,31 +208,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $puebloRaw = $formulario['pueblo_id'];
         $puebloId = is_string($puebloRaw) ? filter_var($puebloRaw, FILTER_VALIDATE_INT) : false;
-        if ($formulario['nombre'] === '' || mb_strlen($formulario['nombre'], 'UTF-8') > 120) {
-            $errores[] = 'El nombre es obligatorio y debe tener máximo 120 caracteres.';
+        $nombreCorrecto = preg_match('/\A[\p{L}\p{M} \'\x{2019}.-]+\z/u', $formulario['nombre']) === 1;
+        $longitudNombre = mb_strlen($formulario['nombre'], 'UTF-8');
+        if ($longitudNombre < 2 || $longitudNombre > 100 || !$nombreCorrecto) {
+            panel_error('nombre', 'Usa de 2 a 100 letras, espacios, apóstrofos, puntos o guiones.');
         }
         if ($puebloId === false || $puebloId < 1) {
-            $errores[] = 'Selecciona un pueblo válido.';
+            panel_error('pueblo_id', 'Selecciona un pueblo válido.');
         } else {
             $stmt = $pdo->prepare('SELECT id FROM pueblos WHERE id = ?');
             $stmt->execute([$puebloId]);
             if (!$stmt->fetchColumn()) {
-                $errores[] = 'El pueblo seleccionado no existe.';
+                panel_error('pueblo_id', 'El pueblo seleccionado no existe.');
             }
         }
         if (!preg_match('/^\d{10}$/', $formulario['telefono'])) {
-            $errores[] = 'El teléfono debe contener exactamente 10 dígitos.';
+            panel_error('telefono', 'El teléfono debe contener exactamente 10 dígitos, sin espacios ni guiones.');
         }
         if (mb_strlen($formulario['correo'], 'UTF-8') > 150
             || !filter_var($formulario['correo'], FILTER_VALIDATE_EMAIL)) {
-            $errores[] = 'Escribe un correo electrónico válido.';
+            panel_error('correo', 'Escribe un correo válido de hasta 150 caracteres.');
         }
         if (mb_strlen($formulario['descripcion'], 'UTF-8') > 1000) {
-            $errores[] = 'La descripción no puede superar 1000 caracteres.';
+            panel_error('descripcion', 'La descripción no puede superar 1000 caracteres.');
         }
         if (!preg_match('/^\d+(?:\.\d{1,2})?$/', $formulario['precio_aprox'])
             || (float) $formulario['precio_aprox'] > 99999999.99) {
-            $errores[] = 'El precio aproximado debe ser un número mayor o igual a cero.';
+            panel_error('precio_aprox', 'El precio aproximado debe ser un número mayor o igual a 0, con hasta dos decimales.');
         }
         if ($usuarioDestinoId === null) {
             $errores[] = 'Selecciona una cuenta de guía antes de guardar el perfil.';
@@ -230,10 +243,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$errores) {
             $consentimiento = $consentimientoMarcado ? 1 : 0;
             $activoActual = $perfil ? (int) $perfil['activo'] : 0;
-            $consentimientoAnterior = $perfil ? (int) $perfil['consentimiento_datos'] : 0;
-            $activo = $consentimiento === 0
+            $activo = $consentimiento === 0 || !$perfil || $ocultarPerfilMarcado
                 ? 0
-                : (!$perfil || $consentimientoAnterior === 0 ? 1 : $activoActual);
+                : $activoActual;
             $actividadesTexto = implode(',', $actividadesSeleccionadas);
             $precio = number_format((float) $formulario['precio_aprox'], 2, '.', '');
 
@@ -288,11 +300,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($accion === 'subir_fotos') {
         if (!$perfil) {
-            $errores[] = 'Guarda primero el perfil para poder agregar fotos.';
+            panel_error('fotos', 'Guarda primero el perfil para poder agregar fotos.');
         } elseif (!isset($_FILES['fotos'])
             || !is_array($_FILES['fotos']['error'] ?? null)
             || !is_array($_FILES['fotos']['tmp_name'] ?? null)) {
-            $errores[] = 'Selecciona al menos una foto.';
+            panel_error('fotos', 'Selecciona al menos una foto.');
         } else {
             $archivos = $_FILES['fotos'];
             $pendientes = [];
@@ -309,9 +321,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             if (!$indicesSeleccionados) {
-                $errores[] = 'Selecciona al menos una foto.';
+                panel_error('fotos', 'Selecciona al menos una foto.');
             } elseif (count($indicesSeleccionados) > $limiteRestante) {
-                $errores[] = 'Cada perfil puede tener un máximo de 5 fotos.';
+                panel_error('fotos', 'Cada perfil puede tener un máximo de 5 fotos.');
             }
 
             if (!$errores) {
@@ -319,21 +331,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 foreach ($indicesSeleccionados as $indice) {
                     $codigoError = $archivos['error'][$indice];
                     if ($codigoError !== UPLOAD_ERR_OK) {
-                        $errores[] = 'La foto ' . ((int) $indice + 1) . ' no se recibió correctamente.';
+                        panel_error('fotos', 'La foto ' . ((int) $indice + 1) . ' no se recibió correctamente.');
                         continue;
                     }
                     $temporal = $archivos['tmp_name'][$indice] ?? '';
                     $tamano = is_string($temporal) && is_file($temporal) ? filesize($temporal) : false;
                     if (!is_string($temporal) || !is_uploaded_file($temporal)
                         || $tamano === false || $tamano < 1 || $tamano > 2 * 1024 * 1024) {
-                        $errores[] = 'Cada foto debe pesar como máximo 2 MB.';
+                        panel_error('fotos', 'Cada foto debe pesar como máximo 2 MB.');
                         continue;
                     }
                     $mime = $finfo->file($temporal);
                     $imagen = @getimagesize($temporal);
                     if (!is_string($mime) || !isset($mimeExtensiones[$mime])
                         || !$imagen || ($imagen['mime'] ?? '') !== $mime) {
-                        $errores[] = 'Solo se aceptan imágenes JPEG, PNG o WebP válidas.';
+                        panel_error('fotos', 'Solo se aceptan imágenes JPEG, PNG o WebP válidas.');
                         continue;
                     }
                     $pendientes[] = ['temporal' => $temporal, 'extension' => $mimeExtensiones[$mime]];
@@ -343,14 +355,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$errores && $pendientes) {
                 $directorio = __DIR__ . '/../img/guias';
                 if (!is_dir($directorio) && !mkdir($directorio, 0755, true) && !is_dir($directorio)) {
-                    $errores[] = 'No se pudo preparar la carpeta de fotos.';
+                    panel_error('fotos', 'No se pudo preparar la carpeta de fotos.');
                 } else {
                     $rutasMovidas = [];
                     foreach ($pendientes as $pendiente) {
                         $nombreArchivo = bin2hex(random_bytes(16)) . '.' . $pendiente['extension'];
                         $destino = $directorio . DIRECTORY_SEPARATOR . $nombreArchivo;
                         if (!move_uploaded_file($pendiente['temporal'], $destino)) {
-                            $errores[] = 'No se pudo guardar una de las fotos seleccionadas.';
+                            panel_error('fotos', 'No se pudo guardar una de las fotos seleccionadas.');
                             break;
                         }
                         $rutasMovidas[] = ['archivo' => $destino, 'ruta' => 'img/guias/' . $nombreArchivo];
@@ -612,7 +624,7 @@ $rutaInicial = array_map(static function (array $punto): array {
             <form method="get" class="form-grid">
               <div class="campo">
                 <label for="guia_id">Perfiles existentes</label>
-                <select id="guia_id" name="guia_id">
+                <select id="guia_id" name="guia_id" aria-describedby="ayuda-guia_id">
                   <option value="">Selecciona un perfil</option>
                   <?php foreach ($listaPerfiles as $item): ?>
                     <option value="<?= (int) $item['id'] ?>" <?= $guiaIdSeleccionado === (int) $item['id'] ? 'selected' : '' ?>>
@@ -620,13 +632,14 @@ $rutaInicial = array_map(static function (array $punto): array {
                     </option>
                   <?php endforeach; ?>
                 </select>
+                <small class="ayuda" id="ayuda-guia_id">Elige el perfil que quieres administrar.</small>
               </div>
               <button class="btn" type="submit">Abrir perfil</button>
             </form>
             <form method="get" class="form-grid stack-form">
               <div class="campo">
                 <label for="usuario_id">Crear perfil para cuenta de guía</label>
-                <select id="usuario_id" name="usuario_id">
+                <select id="usuario_id" name="usuario_id" aria-describedby="ayuda-usuario_id">
                   <option value="">Selecciona una cuenta sin perfil</option>
                   <?php foreach ($cuentasGuia as $cuenta): ?>
                     <option value="<?= (int) $cuenta['id'] ?>" <?= $usuarioDestinoId === (int) $cuenta['id'] && !$perfilSeleccionadoPorId ? 'selected' : '' ?>>
@@ -634,6 +647,7 @@ $rutaInicial = array_map(static function (array $punto): array {
                     </option>
                   <?php endforeach; ?>
                 </select>
+                <small class="ayuda" id="ayuda-usuario_id">Elige la cuenta a la que se asignará un perfil.</small>
               </div>
               <button class="btn-secundario" type="submit">Abrir cuenta</button>
             </form>
@@ -648,6 +662,11 @@ $rutaInicial = array_map(static function (array $punto): array {
       <?php if ($mensaje !== ''): ?>
         <p class="auth-aviso ok" role="status"><?= panel_h($mensaje) ?></p>
       <?php endif; ?>
+      <?php if ($perfil): ?>
+        <p class="auth-aviso <?= (int) $perfil['activo'] === 1 ? 'ok' : '' ?>" role="status">
+          <?= (int) $perfil['activo'] === 1 ? 'Tu perfil está publicado' : 'Tu perfil está en revisión' ?>
+        </p>
+      <?php endif; ?>
 
       <?php if (!$esAdmin || $perfil || $usuarioDestinoId !== null): ?>
         <?php if (!$perfil && $usuarioDestinoId === null): ?>
@@ -657,17 +676,21 @@ $rutaInicial = array_map(static function (array $punto): array {
             <div class="card-cuerpo">
               <h2><?= $perfil ? 'Editar perfil' : 'Crear perfil' ?></h2>
               <p class="card-desc">Los campos con datos públicos solo se mostrarán si autorizas su publicación y el perfil está activo.</p>
-              <form method="post" action="<?= panel_h($actionUrl) ?>">
+              <form method="post" action="<?= panel_h($actionUrl) ?>" data-validar-form novalidate>
                 <input type="hidden" name="csrf_token" value="<?= panel_h($csrf) ?>">
                 <input type="hidden" name="accion" value="guardar_perfil">
                 <div class="form-grid">
                   <div class="campo">
                     <label for="nombre">Nombre público</label>
-                    <input id="nombre" name="nombre" maxlength="120" value="<?= panel_h($formulario['nombre']) ?>" required>
+                    <input id="nombre" name="nombre" maxlength="200" minlength="2" value="<?= panel_h($formulario['nombre']) ?>" placeholder="Ej. María Fernanda López Cruz" autocomplete="name" data-validacion="nombre" required aria-describedby="ayuda-nombre<?= isset($erroresCampo['nombre']) ? ' nombre-error' : '' ?>">
+                    <small class="ayuda" id="ayuda-nombre">Letras y espacios, de 2 a 100 caracteres; se permiten apóstrofo, punto y guion.</small>
+                    <?php if (isset($erroresCampo['nombre'])): ?>
+                      <small class="error-campo" id="nombre-error" role="alert"><?= panel_h($erroresCampo['nombre']) ?></small>
+                    <?php endif; ?>
                   </div>
                   <div class="campo">
                     <label for="pueblo_id">Pueblo</label>
-                    <select id="pueblo_id" name="pueblo_id" required>
+                    <select id="pueblo_id" name="pueblo_id" data-validacion="pueblo" required aria-describedby="ayuda-pueblo_id<?= isset($erroresCampo['pueblo_id']) ? ' pueblo_id-error' : '' ?>">
                       <option value="">Selecciona un pueblo</option>
                       <?php foreach ($pueblos as $pueblo): ?>
                         <option value="<?= (int) $pueblo['id'] ?>" <?= (string) $formulario['pueblo_id'] === (string) $pueblo['id'] ? 'selected' : '' ?>>
@@ -675,20 +698,37 @@ $rutaInicial = array_map(static function (array $punto): array {
                         </option>
                       <?php endforeach; ?>
                     </select>
+                    <small class="ayuda" id="ayuda-pueblo_id">Selecciona el pueblo donde ofreces tus recorridos.</small>
+                    <?php if (isset($erroresCampo['pueblo_id'])): ?>
+                      <small class="error-campo" id="pueblo_id-error" role="alert"><?= panel_h($erroresCampo['pueblo_id']) ?></small>
+                    <?php endif; ?>
                   </div>
                   <div class="campo">
-                    <label for="telefono">Teléfono (10 dígitos)</label>
-                    <input id="telefono" name="telefono" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" value="<?= panel_h($formulario['telefono']) ?>" required>
+                    <label for="telefono">Teléfono</label>
+                    <input id="telefono" name="telefono" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" value="<?= panel_h($formulario['telefono']) ?>" placeholder="Ej. 7711234567" autocomplete="tel" data-validacion="telefono" required aria-describedby="ayuda-telefono<?= isset($erroresCampo['telefono']) ? ' telefono-error' : '' ?>">
+                    <small class="ayuda" id="ayuda-telefono">10 dígitos, sin espacios ni guiones.</small>
+                    <?php if (isset($erroresCampo['telefono'])): ?>
+                      <small class="error-campo" id="telefono-error" role="alert"><?= panel_h($erroresCampo['telefono']) ?></small>
+                    <?php endif; ?>
                   </div>
                   <div class="campo">
                     <label for="correo">Correo</label>
-                    <input id="correo" name="correo" type="email" maxlength="150" value="<?= panel_h($formulario['correo']) ?>" required>
+                    <input id="correo" name="correo" type="email" maxlength="150" value="<?= panel_h($formulario['correo']) ?>" placeholder="ejemplo@correo.com" autocomplete="email" data-validacion="correo" required aria-describedby="ayuda-correo<?= isset($erroresCampo['correo']) ? ' correo-error' : '' ?>">
+                    <small class="ayuda" id="ayuda-correo">Correo válido, de máximo 150 caracteres.</small>
+                    <?php if (isset($erroresCampo['correo'])): ?>
+                      <small class="error-campo" id="correo-error" role="alert"><?= panel_h($erroresCampo['correo']) ?></small>
+                    <?php endif; ?>
                   </div>
                   <div class="campo completo">
                     <label for="descripcion">Descripción (máximo 1000 caracteres)</label>
-                    <textarea id="descripcion" name="descripcion" maxlength="1000" rows="4"><?= panel_h($formulario['descripcion']) ?></textarea>
+                    <textarea id="descripcion" name="descripcion" maxlength="2000" rows="4" placeholder="Describe brevemente tus recorridos" data-validacion="descripcion" data-contador-caracteres="contador-descripcion" data-limite-caracteres="1000" aria-describedby="ayuda-descripcion contador-descripcion<?= isset($erroresCampo['descripcion']) ? ' descripcion-error' : '' ?>"><?= panel_h($formulario['descripcion']) ?></textarea>
+                    <small class="ayuda" id="ayuda-descripcion">Máximo 1000 caracteres.</small>
+                    <small class="ayuda" id="contador-descripcion" aria-live="polite"><?= mb_strlen($formulario['descripcion'], 'UTF-8') ?>/1000 caracteres</small>
+                    <?php if (isset($erroresCampo['descripcion'])): ?>
+                      <small class="error-campo" id="descripcion-error" role="alert"><?= panel_h($erroresCampo['descripcion']) ?></small>
+                    <?php endif; ?>
                   </div>
-                  <fieldset class="completo fieldset-reset">
+                  <fieldset class="completo fieldset-reset" aria-describedby="ayuda-actividades">
                     <legend>Actividades</legend>
                     <div class="etiquetas">
                       <?php foreach ($actividadesDisponibles as $clave => $etiqueta): ?>
@@ -698,18 +738,28 @@ $rutaInicial = array_map(static function (array $punto): array {
                         </label>
                       <?php endforeach; ?>
                     </div>
+                    <small class="ayuda" id="ayuda-actividades">Selecciona las actividades que ofreces; puedes elegir varias.</small>
                   </fieldset>
                   <div class="campo">
                     <label for="precio_aprox">Precio aproximado (MXN)</label>
-                    <input id="precio_aprox" name="precio_aprox" type="number" min="0" max="99999999.99" step="0.01" value="<?= panel_h($formulario['precio_aprox']) ?>" required>
+                    <input id="precio_aprox" name="precio_aprox" type="number" min="0" max="99999999.99" step="0.01" value="<?= panel_h($formulario['precio_aprox']) ?>" placeholder="0" data-validacion="precio" required aria-describedby="ayuda-precio_aprox<?= isset($erroresCampo['precio_aprox']) ? ' precio_aprox-error' : '' ?>">
+                    <small class="ayuda" id="ayuda-precio_aprox">Número mayor o igual a 0; hasta dos decimales.</small>
+                    <?php if (isset($erroresCampo['precio_aprox'])): ?>
+                      <small class="error-campo" id="precio_aprox-error" role="alert"><?= panel_h($erroresCampo['precio_aprox']) ?></small>
+                    <?php endif; ?>
                   </div>
                   <div class="completo">
                     <label class="consentimiento-label">
-                      <input type="checkbox" name="consentimiento_datos" value="1" <?= $consentimientoMarcado ? 'checked' : '' ?>>
+                      <input type="checkbox" name="consentimiento_datos" value="1" aria-describedby="ayuda-consentimiento" <?= $consentimientoMarcado ? 'checked' : '' ?>>
                       Autorizo publicar mi nombre, fotos, teléfono y correo en el sitio, conforme al
                       <a href="../aviso-privacidad.html" target="_blank" rel="noopener">aviso de privacidad</a>.
                     </label>
-                    <small>La autorización es necesaria para publicar el perfil. Si la desmarcas, se guardará inactivo y dejará de aparecer públicamente.</small>
+                    <small class="ayuda" id="ayuda-consentimiento">Sin autorización, el perfil se guardará inactivo y no aparecerá públicamente.</small>
+                    <label class="consentimiento-label mt-4">
+                      <input type="checkbox" name="ocultar_perfil" value="1" aria-describedby="ayuda-ocultar-perfil" <?= $ocultarPerfilMarcado ? 'checked' : '' ?>>
+                      Ocultar mi perfil
+                    </label>
+                    <small class="ayuda" id="ayuda-ocultar-perfil">Puedes desactivarlo en cualquier momento. Solo administración puede aprobar su publicación.</small>
                   </div>
                   <button class="btn btn-bloque completo" type="submit">Guardar perfil</button>
                 </div>
@@ -744,12 +794,16 @@ $rutaInicial = array_map(static function (array $punto): array {
                   </div>
                 <?php endif; ?>
                 <?php if (count($fotosPerfil) < 5): ?>
-                  <form method="post" enctype="multipart/form-data" action="<?= panel_h($actionUrl) ?>" class="stack-form">
+                  <form method="post" enctype="multipart/form-data" action="<?= panel_h($actionUrl) ?>" class="stack-form" data-validar-form novalidate>
                     <input type="hidden" name="csrf_token" value="<?= panel_h($csrf) ?>">
                     <input type="hidden" name="accion" value="subir_fotos">
                     <div class="campo">
                       <label for="fotos">Agregar fotos (JPEG, PNG o WebP; máximo 2 MB cada una)</label>
-                      <input id="fotos" type="file" name="fotos[]" accept="image/jpeg,image/png,image/webp" multiple required>
+                      <input id="fotos" type="file" name="fotos[]" accept=".jpg,.jpeg,.png,.webp" data-validacion="fotos" data-max-files="<?= max(0, 5 - count($fotosPerfil)) ?>" aria-describedby="ayuda-fotos<?= isset($erroresCampo['fotos']) ? ' fotos-error' : '' ?>" multiple required>
+                      <small class="ayuda" id="ayuda-fotos">Solo .jpg, .jpeg, .png o .webp; máximo 2 MB cada una y <?= max(0, 5 - count($fotosPerfil)) ?> archivo(s) disponible(s).</small>
+                      <?php if (isset($erroresCampo['fotos'])): ?>
+                        <small class="error-campo" id="fotos-error" role="alert"><?= panel_h($erroresCampo['fotos']) ?></small>
+                      <?php endif; ?>
                     </div>
                     <button class="btn" type="submit">Subir fotos</button>
                   </form>
@@ -795,6 +849,7 @@ $rutaInicial = array_map(static function (array $punto): array {
     window.RDE_PUNTOS_INICIALES = <?= json_encode($rutaInicial, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+  <script src="../js/validacion-formularios.js"></script>
   <script src="../js/panel-guia.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/accesibilidad.js"></script>

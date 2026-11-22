@@ -338,20 +338,22 @@ window.fotoVacia = function (img) {
   /* ---- Reservar hospedaje ---- */
   function abrirReserva(id, pre = {}) {
     const p = PUEBLOS[id], h = p.hotel;
-    const huespedes = [1, 2, 3, 4, 5, 6].includes(Number(pre.huespedes)) ? Number(pre.huespedes) : 2;
+    const huespedes = Number.isInteger(Number(pre.huespedes)) && Number(pre.huespedes) >= 1 && Number(pre.huespedes) <= 10
+      ? Number(pre.huespedes)
+      : 2;
     const llegada = /^\d{4}-\d{2}-\d{2}$/.test(pre.llegada || '') ? pre.llegada : '';
     const salida = /^\d{4}-\d{2}-\d{2}$/.test(pre.salida || '') ? pre.salida : '';
     abrirModal(`
       ${foto(h.foto, h.nombre, 'foto modal-foto')}
       <h3>Reservar en ${h.nombre}</h3>
       <p class="modal-sub">📍 ${p.nombre} · desde ${dinero(h.precio)} / noche</p>
-      <form id="form-reserva" class="form-grid">
+      <form id="form-reserva" class="form-grid" data-validar-form novalidate>
         <input type="hidden" name="hotel_id" value="${h.id}">
-        <div class="campo"><label for="r-llegada">Llegada</label><input id="r-llegada" type="date" name="llegada" min="${hoy}" value="${llegada}" required></div>
-        <div class="campo"><label for="r-salida">Salida</label><input id="r-salida" type="date" name="salida" min="${hoy}" value="${salida}" required></div>
+        <div class="campo"><label for="r-llegada">Llegada</label><input id="r-llegada" type="date" name="llegada" min="${hoy}" value="${llegada}" data-validacion="llegada" required aria-describedby="ayuda-r-llegada"><small class="ayuda" id="ayuda-r-llegada">Elige una fecha desde hoy.</small></div>
+        <div class="campo"><label for="r-salida">Salida</label><input id="r-salida" type="date" name="salida" min="${hoy}" value="${salida}" data-validacion="salida" required aria-describedby="ayuda-r-salida"><small class="ayuda" id="ayuda-r-salida">Debe ser posterior a la llegada.</small></div>
         <div class="campo"><label for="r-huespedes">Huéspedes</label>
-          <select id="r-huespedes" name="huespedes">${[1, 2, 3, 4, 5, 6].map(n => `<option ${n == huespedes ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
-        <div class="campo"><label for="r-telefono">Teléfono</label><input id="r-telefono" type="tel" name="telefono" placeholder="771 123 4567" required></div>
+          <select id="r-huespedes" name="huespedes" data-validacion="huespedes" required aria-describedby="ayuda-r-huespedes">${Array.from({ length: 10 }, (_, i) => i + 1).map(n => `<option ${n === huespedes ? 'selected' : ''}>${n}</option>`).join('')}</select><small class="ayuda" id="ayuda-r-huespedes">Elige de 1 a 10 huéspedes.</small></div>
+        <div class="campo"><label for="r-telefono">Teléfono</label><input id="r-telefono" type="tel" name="telefono" inputmode="numeric" maxlength="10" placeholder="Ej. 7711234567" autocomplete="tel" data-validacion="telefono" required aria-describedby="ayuda-r-telefono"><small class="ayuda" id="ayuda-r-telefono">10 dígitos, sin espacios ni guiones.</small></div>
         <div class="resumen completo" id="resumen" aria-live="polite"></div>
         <button class="btn btn-bloque completo" type="submit">Confirmar reservación</button>
       </form>`);
@@ -405,14 +407,18 @@ window.fotoVacia = function (img) {
         const resultado = await respuesta.json();
         if (respuesta.status === 401) { pedirSesion(); return; }
         if (respuesta.status === 422) {
-          resumen.textContent = '';
+          resumen.replaceChildren();
+          const noAsignados = window.RDE_VALIDACION
+            ? window.RDE_VALIDACION.mostrarErrores(form, resultado.errores)
+            : (Array.isArray(resultado.errores) ? resultado.errores : Object.values(resultado.errores || {}));
           const lista = document.createElement('ul');
-          (resultado.errores || []).forEach(mensaje => {
+          noAsignados.forEach(mensaje => {
             const item = document.createElement('li');
             item.textContent = mensaje;
             lista.append(item);
           });
-          resumen.append(lista);
+          if (noAsignados.length) resumen.append(lista);
+          else resumen.textContent = 'Corrige los campos marcados e inténtalo de nuevo.';
           return;
         }
         if (respuesta.status === 201) {
@@ -542,7 +548,7 @@ window.fotoVacia = function (img) {
     if (!borrador) return;
     const destino = Object.keys(PUEBLOS).find(id => String(PUEBLOS[id].hotel.id) === String(borrador.hotel_id));
     const huespedes = Number(borrador.huespedes);
-    if (!destino || ![1, 2, 3, 4, 5, 6].includes(huespedes)) return;
+    if (!destino || !Number.isInteger(huespedes) || huespedes < 1 || huespedes > 10) return;
     renderPanel(destino);
     abrirReserva(destino, borrador);
     sessionStorage.removeItem('rde_borrador');

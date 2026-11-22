@@ -11,11 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 requerir_permiso_json('reservar');       // 401 si no hay sesión, 403 si el rol no puede
 $usuario = usuario_actual();
 
-$hotel_id   = filter_var($_POST['hotel_id'] ?? '', FILTER_VALIDATE_INT);
-$llegada    = $_POST['llegada'] ?? '';
-$salida     = $_POST['salida'] ?? '';
-$huespedes  = filter_var($_POST['huespedes'] ?? '', FILTER_VALIDATE_INT);
-$telefono   = preg_replace('/\D/', '', $_POST['telefono'] ?? '');
+$hotelRaw = $_POST['hotel_id'] ?? '';
+$llegadaRaw = $_POST['llegada'] ?? '';
+$salidaRaw = $_POST['salida'] ?? '';
+$huespedesRaw = $_POST['huespedes'] ?? '';
+$telefonoRaw = $_POST['telefono'] ?? '';
+$hotel_id = is_string($hotelRaw) ? filter_var($hotelRaw, FILTER_VALIDATE_INT) : false;
+$llegada = is_string($llegadaRaw) ? $llegadaRaw : '';
+$salida = is_string($salidaRaw) ? $salidaRaw : '';
+$huespedes = is_string($huespedesRaw) ? filter_var($huespedesRaw, FILTER_VALIDATE_INT) : false;
+$telefono = is_string($telefonoRaw) ? $telefonoRaw : '';
 
 $errores = [];
 
@@ -26,32 +31,37 @@ $okLlegada = $fLlegada && $fLlegada->format('Y-m-d') === $llegada;
 $okSalida  = $fSalida  && $fSalida->format('Y-m-d')  === $salida;
 
 if (!$okLlegada || !$okSalida) {
-    $errores[] = 'Las fechas no son válidas.';
+    if (!$okLlegada) {
+        $errores['llegada'] = 'Escribe una fecha de llegada válida.';
+    }
+    if (!$okSalida) {
+        $errores['salida'] = 'Escribe una fecha de salida válida.';
+    }
 } else {
     $hoy = new DateTime('today');
     if ($fLlegada < $hoy) {
-        $errores[] = 'La llegada no puede ser anterior a hoy.';
+        $errores['llegada'] = 'La llegada no puede ser anterior a hoy.';
     }
     if ($fSalida <= $fLlegada) {
-        $errores[] = 'La salida debe ser después de la llegada.';
+        $errores['salida'] = 'La salida debe ser posterior a la llegada.';
     }
     if ($fLlegada <= $fSalida && $fLlegada->diff($fSalida)->days > 30) {
-        $errores[] = 'La estancia máxima es de 30 noches.';
+        $errores['salida'] = 'La estancia máxima es de 30 noches.';
     }
 }
 if ($huespedes === false || $huespedes < 1 || $huespedes > 10) {
-    $errores[] = 'El número de huéspedes debe estar entre 1 y 10.';
+    $errores['huespedes'] = 'El número de huéspedes debe estar entre 1 y 10.';
 }
 if (!preg_match('/^\d{10}$/', $telefono)) {
-    $errores[] = 'El teléfono debe tener 10 dígitos.';
+    $errores['telefono'] = 'El teléfono debe contener exactamente 10 dígitos, sin espacios ni guiones.';
 }
 if ($hotel_id === false || $hotel_id < 1) {
-    $errores[] = 'Hospedaje no válido.';
+    $errores['hotel_id'] = 'Hospedaje no válido.';
 } else {
     $stmt = $pdo->prepare('SELECT id FROM hoteles WHERE id = ?');
     $stmt->execute([$hotel_id]);
     if (!$stmt->fetch()) {
-        $errores[] = 'El hospedaje no existe.';
+        $errores['hotel_id'] = 'El hospedaje no existe.';
     }
 }
 
