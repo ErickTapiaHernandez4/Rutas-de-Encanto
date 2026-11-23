@@ -75,17 +75,17 @@ window.fotoVacia = function (img) {
     huasca: {
       nombre: 'Huasca de Ocampo',
       frase: 'Donde la piedra se convierte en cascada',
-      foto: 'img/pueblos/huasca.jpg',
+      foto: 'img/pueblos/huasca.png',
       desc: 'El primer Pueblo Mágico de México. Camina entre los Prismas Basálticos, recorre haciendas antiguas y escucha las leyendas de duendes del bosque.',
       datos: ['🌡️ 12 – 22 °C', '🚗 40 min de Pachuca', '📅 Todo el año'],
       imperdibles: ['Prismas Basálticos', 'Hacienda Santa María Regla', 'Peña del Aire'],
       hotel: {
         id: 1,
-        nombre: 'Cabañas Bosque de Huasca', foto: 'img/hospedaje/hotel-1.jpg',
+        nombre: 'Cabañas Bosque de Huasca', foto: 'img/hospedaje/hotel-1.png',
         precio: window.RDE_PRECIOS_HOTELES[1], calif: 4.8, resenas: 23, etiquetas: ['Desayuno incluido', 'Chimenea']
       },
       restaurante: {
-        nombre: 'Fonda La Hacienda', foto: 'img/restaurantes/restaurante-1.jpg',
+        nombre: 'Fonda La Hacienda', foto: 'img/restaurantes/restaurante-1.png',
         especialidad: 'Trucha al ajillo y barbacoa de borrego',
         direccion: 'Calle Principal s/n, Huasca de Ocampo',
         distancia: 'A 5 min caminando del centro',
@@ -97,7 +97,7 @@ window.fotoVacia = function (img) {
     chico: {
       nombre: 'Mineral del Chico',
       frase: 'Un pueblo escondido entre el bosque',
-      foto: 'img/pueblos/mineral-del-chico.jpg',
+      foto: 'img/pueblos/mineral-del-chico.png',
       desc: 'Rodeado por el Parque Nacional El Chico. Ideal para senderismo, escalada y tirolesa entre pinos y enormes peñas de roca.',
       datos: ['🌡️ 8 – 18 °C', '🚗 30 min de Pachuca', '🧥 Lleva chamarra'],
       imperdibles: ['Peña del Cuervo', 'Parque Nacional El Chico', 'Presa El Cedral'],
@@ -119,13 +119,13 @@ window.fotoVacia = function (img) {
     real: {
       nombre: 'Real del Monte',
       frase: 'La cuna del paste y del fútbol en México',
-      foto: 'img/pueblos/real-del-monte.jpg',
+      foto: 'img/pueblos/real-del-monte.png',
       desc: 'Calles empedradas, herencia minera inglesa y el aroma de los pastes recién horneados. Baja a una mina de verdad y visita el Panteón Inglés.',
       datos: ['🌡️ 10 – 20 °C', '🚗 20 min de Pachuca', '📅 Todo el año'],
       imperdibles: ['Mina de Acosta', 'Panteón Inglés', 'Museo del Paste'],
       hotel: {
         id: 3,
-        nombre: 'Posada Real Minera', foto: 'img/hospedaje/hotel-3.jpg',
+        nombre: 'Posada Real Minera', foto: 'img/hospedaje/hotel-3.png',
         precio: window.RDE_PRECIOS_HOTELES[3], calif: 4.9, resenas: 12, etiquetas: ['Centro histórico', 'Wi-Fi gratis']
       },
       restaurante: {
@@ -142,7 +142,7 @@ window.fotoVacia = function (img) {
 
   const GUIAS = {
     lupita: {
-      nombre: 'Lupita Mendoza', foto: 'img/guias/guia-1.jpg', pueblo: 'Huasca de Ocampo',
+      nombre: 'Lupita Mendoza', foto: 'img/guias/guia.png', pueblo: 'Huasca de Ocampo',
       idiomas: 'Español • English • Hñähñu', experiencia: '8 años',
       especialidades: ['Gastronomía local', 'Haciendas', 'Leyendas'],
       whatsapp: '527710000001',
@@ -150,7 +150,7 @@ window.fotoVacia = function (img) {
       comentarios: [{ nombre: 'Andrea', estrellas: 5, texto: 'Súper amable, conoce cada rincón de Huasca.' }]
     },
     carlos: {
-      nombre: 'Carlos Reyes', foto: 'img/guias/guia-2.jpg', pueblo: 'Real del Monte',
+      nombre: 'Carlos Reyes', foto: 'img/guias/carlos-reyes.png', pueblo: 'Real del Monte',
       idiomas: 'Español • English', experiencia: '12 años',
       especialidades: ['Historia minera', 'Mina de Acosta', 'Pastes'],
       whatsapp: '527710000002',
@@ -158,7 +158,7 @@ window.fotoVacia = function (img) {
       comentarios: [{ nombre: 'Jorge', estrellas: 5, texto: 'El recorrido por la mina fue increíble.' }]
     },
     ismael: {
-      nombre: 'Ismael García', foto: 'img/guias/guia-3.jpg', pueblo: 'Mineral del Chico',
+      nombre: 'Ismael García', foto: 'img/guias/ismael-garcia.png', pueblo: 'Mineral del Chico',
       idiomas: 'Español • English • Francés', experiencia: '6 años',
       especialidades: ['Senderismo', 'Escalada', 'Fotografía'],
       whatsapp: '527710000003',

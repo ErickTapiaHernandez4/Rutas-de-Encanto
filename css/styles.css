@@ -109,9 +109,9 @@ h3 { font-size: var(--tam-h3); }
 .hero {
   min-height: 430px; display: grid; place-items: center; text-align: center; color: #fff;
   padding: 4rem 1rem;
-  /* Pon tu foto en img/hero.jpg */
+  /* Pon tu foto en img/portada/hero.png */
   background: linear-gradient(rgba(28, 36, 18, .55), rgba(28, 36, 18, .60)),
-              url('../img/hero.jpg') center / cover no-repeat var(--verde);
+              url('../img/portada/hero.png') center / cover no-repeat var(--verde);
 }
 .hero h1 { font-size: clamp(2.2rem, 6vw, 4rem); text-shadow: 0 3px 12px rgba(0,0,0,.4); }
 .hero p { font-size: var(--tam-texto); font-weight: 700; margin: var(--espacio-3) auto var(--espacio-5); max-width: 760px; }

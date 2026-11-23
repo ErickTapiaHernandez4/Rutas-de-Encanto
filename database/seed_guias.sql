@@ -41,11 +41,11 @@ INSERT INTO guias (
   );
 
 INSERT INTO guia_fotos (guia_id, ruta_archivo) VALUES
-  ((SELECT id FROM guias WHERE nombre = 'Lía Viento de Huasca' ORDER BY id DESC LIMIT 1), 'img/guias/guia-1.jpg'),
+  ((SELECT id FROM guias WHERE nombre = 'Lía Viento de Huasca' ORDER BY id DESC LIMIT 1), 'img/guias/lia-viento-de-huasca.png'),
   ((SELECT id FROM guias WHERE nombre = 'Lía Viento de Huasca' ORDER BY id DESC LIMIT 1), 'img/pueblos/huasca.jpg'),
-  ((SELECT id FROM guias WHERE nombre = 'Elian Bosque Chico' ORDER BY id DESC LIMIT 1), 'img/guias/guia-2.jpg'),
+  ((SELECT id FROM guias WHERE nombre = 'Elian Bosque Chico' ORDER BY id DESC LIMIT 1), 'img/guias/elian-bosque-chico.png'),
   ((SELECT id FROM guias WHERE nombre = 'Elian Bosque Chico' ORDER BY id DESC LIMIT 1), 'img/pueblos/mineral-del-chico.jpg'),
-  ((SELECT id FROM guias WHERE nombre = 'Mara Mina Serena' ORDER BY id DESC LIMIT 1), 'img/guias/guia-3.jpg'),
+  ((SELECT id FROM guias WHERE nombre = 'Mara Mina Serena' ORDER BY id DESC LIMIT 1), 'img/guias/mara-mina-serena.png'),
   ((SELECT id FROM guias WHERE nombre = 'Mara Mina Serena' ORDER BY id DESC LIMIT 1), 'img/pueblos/real-del-monte.jpg');
 
 INSERT INTO guia_ruta_puntos (guia_id, orden, nombre, latitud, longitud) VALUES

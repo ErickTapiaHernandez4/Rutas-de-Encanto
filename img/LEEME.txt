@@ -1,14 +1,42 @@
 CÓMO PONER TUS FOTOS
-Guarda tus fotos con EXACTAMENTE estos nombres (minúsculas, .jpg):
+Sube las imágenes a la carpeta indicada y conserva exactamente estos nombres:
 
-img/hero.jpg                         -> foto grande de la portada
-img/pueblos/huasca.jpg, real-del-monte.jpg, zempoala.jpg, zimapan.jpg,
-            huichapan.jpg, tecozautla.jpg, mineral-del-chico.jpg, metztitlan.jpg
-img/hospedaje/hotel-1.jpg ... hotel-6.jpg
-img/restaurantes/restaurante-1.jpg ... restaurante-6.jpg
-img/guias/guia-1.jpg ... guia-3.jpg
-img/lugares/lugar-1.jpg ... lugar-3.jpg
+PORTADA
+img/portada/hero.png
 
-Mientras no exista la foto, la página muestra un recuadro punteado
-con el nombre del archivo que falta.
-Si tu foto es .png, cambia la extensión en el src="" del HTML.
+PUEBLOS
+img/pueblos/huasca.jpg
+img/pueblos/mineral-del-chico.jpg
+img/pueblos/real-del-monte.jpg
+
+HOSPEDAJE
+img/hospedaje/hotel-1.jpg
+img/hospedaje/hotel-2.jpg
+img/hospedaje/hotel-3.jpg
+img/hospedaje/hotel-4.jpg
+img/hospedaje/hotel-5.jpg
+img/hospedaje/hotel-6.jpg
+
+RESTAURANTES
+img/restaurantes/restaurante-1.jpg
+img/restaurantes/restaurante-2.jpg
+img/restaurantes/restaurante-3.jpg
+img/restaurantes/restaurante-4.jpg
+img/restaurantes/restaurante-5.jpg
+img/restaurantes/restaurante-6.jpg
+
+GUIAS DE EJEMPLO
+img/guias/guia.png                         -> Lupita Mendoza
+img/guias/lia-viento-de-huasca.png         -> Lía Viento de Huasca
+img/guias/elian-bosque-chico.png           -> Elian Bosque Chico
+img/guias/mara-mina-serena.png             -> Mara Mina Serena
+img/guias/carlos-reyes.png                 -> Carlos Reyes (foto pendiente)
+img/guias/ismael-garcia.png                -> Ismael García (foto pendiente)
+
+LUGARES
+img/lugares/lugar-1.jpg
+img/lugares/lugar-2.jpg
+img/lugares/lugar-3.jpg
+
+Las fotos de guías que se suben desde el panel usan nombres aleatorios y no
+reemplazan estas imágenes de ejemplo.

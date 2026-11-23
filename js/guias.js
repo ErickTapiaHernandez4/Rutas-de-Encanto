@@ -6,6 +6,11 @@
   const filtroPueblo = document.getElementById('filtro-pueblo');
   const filtroActividad = document.getElementById('filtro-actividad');
   const paginaGuias = Boolean(filtroPueblo && filtroActividad);
+  const fotosGuiasEjemplo = {
+    'Lía Viento de Huasca': 'img/guias/lia-viento-de-huasca.png',
+    'Elian Bosque Chico': 'img/guias/elian-bosque-chico.png',
+    'Mara Mina Serena': 'img/guias/mara-mina-serena.png'
+  };
   let filtrosCargados = false;
   let solicitudLista = 0;
 
@@ -33,6 +38,12 @@
       && !ruta.includes('..');
   }
 
+  function fotoGuia(guia, ruta) {
+    return /^img\/guias\/guia-[123]\.(?:jpg|png)$/i.test(texto(ruta))
+      ? fotosGuiasEjemplo[texto(guia.nombre)] || ruta
+      : ruta;
+  }
+
   function agregarFoto(caja, ruta, alt) {
     if (!rutaImagenValida(ruta)) {
       caja.dataset.ruta = 'Foto no disponible';
@@ -43,11 +54,17 @@
     const imagen = document.createElement('img');
     imagen.src = ruta;
     imagen.alt = alt;
+    let intentoPng = false;
     imagen.addEventListener('error', function () {
+      if (!intentoPng && /\.jpe?g$/i.test(ruta)) {
+        intentoPng = true;
+        imagen.src = ruta.replace(/\.jpe?g$/i, '.png');
+        return;
+      }
       caja.dataset.ruta = ruta;
       caja.classList.add('sin-foto');
       imagen.remove();
-    }, { once: true });
+    });
     caja.append(imagen);
   }
 
@@ -57,7 +74,7 @@
 
     const foto = document.createElement('div');
     foto.className = 'foto';
-    agregarFoto(foto, guia.foto, 'Foto de ' + texto(guia.nombre));
+    agregarFoto(foto, fotoGuia(guia, guia.foto), 'Foto de ' + texto(guia.nombre));
     articulo.append(foto);
 
     const cuerpo = document.createElement('div');
@@ -264,7 +281,7 @@
       (Array.isArray(guia.fotos) ? guia.fotos : []).forEach(function (ruta, indice) {
         const marco = document.createElement('div');
         marco.className = 'foto';
-        agregarFoto(marco, ruta, 'Foto ' + (indice + 1) + ' de ' + texto(guia.nombre));
+        agregarFoto(marco, fotoGuia(guia, ruta), 'Foto ' + (indice + 1) + ' de ' + texto(guia.nombre));
         galeria.append(marco);
       });
       if (galeria.childElementCount) contenido.append(galeria);
