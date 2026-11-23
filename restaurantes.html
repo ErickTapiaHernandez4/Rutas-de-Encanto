@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/accesibilidad.css">
+  <link rel="stylesheet" href="css/restaurantes.css">
 </head>
 <body>
 
@@ -38,130 +39,13 @@
       <h1>Restaurantes en Pueblos Mágicos</h1>
       <p>Gastronomía hidalguense: pastes, barbacoa, pulque, café de olla y más. Sabores auténticos de cada pueblo.</p>
 
-      <div class="filtros">
-        <button class="chip activo" data-filtro="todos">Todos</button>
-        <button class="chip" data-filtro="barbacoa">Barbacoa</button>
-        <button class="chip" data-filtro="pastes">Pastes</button>
-        <button class="chip" data-filtro="pulque">Pulque</button>
-        <button class="chip" data-filtro="cafe">Café y postres</button>
-        <button class="chip" data-filtro="familiar">Familiar</button>
-        <span class="contador"></span>
+      <!-- Los filtros por pueblo se crean solos con los datos de la base -->
+      <div class="filtros" id="filtros-rest">
+        <span class="contador" id="contador-rest"></span>
       </div>
 
-      <div class="rejilla">
-        <!-- ===== RESTAURANTE 1 =====  Foto: img/restaurantes/restaurante-1.jpg -->
-        <article class="card" data-filtros="barbacoa">
-          <div class="foto">
-            <span class="badge">Popular</span>
-            <img src="img/restaurantes/restaurante-1.jpg" alt="Foto del restaurante">
-          </div>
-          <div class="card-cuerpo">
-            <h3>Nombre del restaurante</h3>
-            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
-            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Actopan, Hidalgo</p>
-            <p class="card-desc">Escribe aquí una descripción corta del lugar y su platillo estrella.</p>
-            <div class="etiquetas"><span class="etiqueta">Barbacoa</span><span class="etiqueta">Consomé</span></div>
-            <div class="card-pie">
-              <p class="precio">Precio <strong>$$</strong></p>
-              <a href="#" class="btn">Ver menú</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- ===== RESTAURANTE 2 =====  Foto: img/restaurantes/restaurante-2.jpg -->
-        <article class="card" data-filtros="pastes">
-          <div class="foto">
-            <span class="badge verde">Favorito</span>
-            <img src="img/restaurantes/restaurante-2.jpg" alt="Foto del restaurante">
-          </div>
-          <div class="card-cuerpo">
-            <h3>Nombre del restaurante</h3>
-            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
-            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Real del Monte, Hidalgo</p>
-            <p class="card-desc">Escribe aquí una descripción corta del lugar y su platillo estrella.</p>
-            <div class="etiquetas"><span class="etiqueta">Pastes</span><span class="etiqueta">Para llevar</span></div>
-            <div class="card-pie">
-              <p class="precio">Precio <strong>$</strong></p>
-              <a href="#" class="btn">Ver menú</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- ===== RESTAURANTE 3 =====  Foto: img/restaurantes/restaurante-3.jpg -->
-        <article class="card" data-filtros="pulque">
-          <div class="foto">
-            <img src="img/restaurantes/restaurante-3.jpg" alt="Foto del restaurante">
-          </div>
-          <div class="card-cuerpo">
-            <h3>Nombre del restaurante</h3>
-            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
-            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Zempoala, Hidalgo</p>
-            <p class="card-desc">Escribe aquí una descripción corta del lugar y su platillo estrella.</p>
-            <div class="etiquetas"><span class="etiqueta">Pulquería</span><span class="etiqueta">Curados</span></div>
-            <div class="card-pie">
-              <p class="precio">Precio <strong>$</strong></p>
-              <a href="#" class="btn">Ver menú</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- ===== RESTAURANTE 4 =====  Foto: img/restaurantes/restaurante-4.jpg -->
-        <article class="card" data-filtros="cafe">
-          <div class="foto">
-            <span class="badge">Nuevo</span>
-            <img src="img/restaurantes/restaurante-4.jpg" alt="Foto del restaurante">
-          </div>
-          <div class="card-cuerpo">
-            <h3>Nombre del restaurante</h3>
-            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
-            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Huasca de Ocampo, Hidalgo</p>
-            <p class="card-desc">Escribe aquí una descripción corta del lugar y su platillo estrella.</p>
-            <div class="etiquetas"><span class="etiqueta">Café de olla</span><span class="etiqueta">Postres</span></div>
-            <div class="card-pie">
-              <p class="precio">Precio <strong>$</strong></p>
-              <a href="#" class="btn">Ver menú</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- ===== RESTAURANTE 5 =====  Foto: img/restaurantes/restaurante-5.jpg -->
-        <article class="card" data-filtros="barbacoa familiar">
-          <div class="foto">
-            <img src="img/restaurantes/restaurante-5.jpg" alt="Foto del restaurante">
-          </div>
-          <div class="card-cuerpo">
-            <h3>Nombre del restaurante</h3>
-            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
-            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Huichapan, Hidalgo</p>
-            <p class="card-desc">Escribe aquí una descripción corta del lugar y su platillo estrella.</p>
-            <div class="etiquetas"><span class="etiqueta">Comida típica</span><span class="etiqueta">Familiar</span></div>
-            <div class="card-pie">
-              <p class="precio">Precio <strong>$$</strong></p>
-              <a href="#" class="btn">Ver menú</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- ===== RESTAURANTE 6 =====  Foto: img/restaurantes/restaurante-6.jpg -->
-        <article class="card" data-filtros="cafe familiar">
-          <div class="foto">
-            <img src="img/restaurantes/restaurante-6.jpg" alt="Foto del restaurante">
-          </div>
-          <div class="card-cuerpo">
-            <h3>Nombre del restaurante</h3>
-            <div class="estrellas"><span>☆☆☆☆☆</span> 0 (0 reseñas)</div>
-            <p class="ubicacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg> Mineral del Chico, Hidalgo</p>
-            <p class="card-desc">Escribe aquí una descripción corta del lugar y su platillo estrella.</p>
-            <div class="etiquetas"><span class="etiqueta">Trucha</span><span class="etiqueta">Vista al bosque</span></div>
-            <div class="card-pie">
-              <p class="precio">Precio <strong>$$</strong></p>
-              <a href="#" class="btn">Ver menú</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Para agregar más: copia un bloque <article>...</article> y cambia la foto a restaurante-7.jpg, etc. -->
-      </div>
+      <!-- Aquí se pintan los restaurantes que llegan de php/restaurantes.php -->
+      <div class="rejilla" id="lista-restaurantes" aria-live="polite"></div>
     </div>
   </section>
 
@@ -181,5 +65,6 @@
   <script src="js/main.js"></script>
   <script src="js/accesibilidad.js"></script>
   <script src="js/sesion.js" data-base=""></script>
+  <script src="js/restaurantes.js"></script>
 </body>
 </html>

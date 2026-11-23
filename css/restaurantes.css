@@ -1,0 +1,54 @@
+/* =========================================================
+   RUTAS DE ENCANTO — Restaurantes
+   ========================================================= */
+
+/* Tarjetas */
+#lista-restaurantes .card-cuerpo { gap: var(--espacio-3); }
+#lista-restaurantes .etiquetas .etiqueta { font-size: .78rem; }
+.rest-ver { margin-top: auto; }
+
+/* Mensajes: cargando, error, vacío */
+.estado-rest {
+  grid-column: 1 / -1; text-align: center;
+  padding: 3rem 1rem; border: 2px dashed var(--borde); border-radius: 14px;
+}
+.estado-rest > div { font-size: 2.6rem; }
+.estado-rest h3 { color: var(--verde); font-size: 1.4rem; margin: .4rem 0; }
+.estado-rest p { color: var(--gris); max-width: 520px; margin: 0 auto; }
+
+/* ---------- Ventana del restaurante ---------- */
+.rest-subtitulo {
+  margin: var(--espacio-5) 0 var(--espacio-2);
+  font-size: 1.05rem; color: var(--verde);
+  padding-bottom: var(--espacio-1); border-bottom: 2px solid var(--borde);
+}
+
+/* Menú */
+.rest-menu { display: grid; gap: var(--espacio-4); }
+.rest-menu-seccion h4 {
+  font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--terracota); margin-bottom: var(--espacio-2);
+}
+.rest-menu-seccion ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--espacio-2); }
+.rest-menu-seccion li {
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--espacio-3);
+  padding-bottom: var(--espacio-2); border-bottom: 1px dashed var(--borde);
+}
+.rest-menu-seccion li div { display: flex; flex-direction: column; min-width: 0; }
+.rest-menu-seccion li small { color: var(--gris); font-size: .85rem; }
+.rest-precio { font-weight: 800; color: var(--verde); white-space: nowrap; }
+
+/* Botones de contacto */
+.rest-contactos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--espacio-2); }
+.rest-contacto {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .15rem;
+  padding: var(--espacio-3) var(--espacio-2); text-align: center;
+  border: 2px solid var(--olivo); border-radius: 12px;
+  color: var(--olivo); font-weight: 800; text-decoration: none;
+  transition: background .2s, color .2s;
+}
+.rest-contacto:hover { background: var(--olivo); color: #fff; }
+.rest-contacto small { font-weight: 600; font-size: .75rem; overflow-wrap: anywhere; }
+
+/* Ícono de ubicación dentro de la ventana */
+.modal-sub svg { width: 1em; height: 1em; vertical-align: -2px; color: var(--olivo); }
